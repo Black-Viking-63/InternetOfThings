@@ -1,0 +1,38 @@
+# K-Meleon Localization 
+# for IEtab extension + IEtab supplement
+
+#ietab.kmm---------------------------------------------------------------------------
+Trident Render=Движок Trident (IE)
+WebKit Render=Движок WebKit (Chrome)
+Open in IE-Tab=Открыть в IE-вкладке
+Open in IE-Tab (*.mht etc.)","*.*=IE-совместимые (*.mht и др.)","*.*
+Open in KM using IE-engine (Trident)=Открыть файл во вкладке с движком IE (Trident)
+
+#ietabsup.kmm------------------------------------------------------------------------
+IEtab extra menus disabled=Допменю для вкладки IE выкл.
+IEtab extra menus enabled=Допменю для вкладки IE вкл.
+IEtab scripting disabled=Выключить скрипты в IE-вкладке
+IEtab scripting enabled=Включить скрипты в IE-вкладке
+IEtab flash animation disabled=Выключить флэш в IE-вкладке
+IEtab flash animation enabled=Включить флэш в IE-вкладке
+Clear Trident (IE) History=Очистить Журнал посещеий IE
+Clear Trident (IE) cookies=Удалить IE-cookies
+Clear Trident (IE) cache=Очистить кэш IE
+Clear Trident (IE) web-forms=Удалить данные веб-форм IE
+Clear Trident (IE) saved passwords=Удалить сохраненные пароли
+Clear All Trident (IE) user private data=Удалить все следы работы пользователя в IE
+View Trident (IE) cache=Просмотреть кэш IE
+
+IETab Options=Настройки IE-вкладок
+Extra Menus=Дополнительные команды в меню
+Block Jscript=Блокировать JS
+Block Flash=Блокировать Flash
+View Cache=Просмотр кэша IE
+Clear IE History=Очистить Журнал IE
+Clear IE Cookies=Удалить IE-cookies
+Clear IE Cache=Очистить кэш IE
+Clear IE Forms=Удалить данные веб-форм IE
+Clear IE Passwords=Удалить сохраненные пароли IE
+Clear All IE Private Data=Удалить все приватные данные IE
+IE Zones=Зоны безопасности IE
+IE Options=Настройки IE

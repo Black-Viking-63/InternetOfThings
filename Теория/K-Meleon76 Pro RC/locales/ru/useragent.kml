@@ -1,0 +1,19 @@
+﻿#--------------пояснения в статусбаре---------------
+Enter New UserAgent=Добавить новый идентификатор
+Search for New User Agent=Искать новый идентификатор в интернете
+Set User Agent  for the current web page=Представляться на текущем сайте выбранным способом
+Check current UserAgent on mybrowserinfo.com=Проверить текущий способ представления браузера на сайте mybrowserinfo.com
+
+#--------------диалоги---------------
+Enter the User Agent string:=Новая идентификационная строка (UserAgent)
+Enter the User Agent Name:Ex (Firefox30)=Введите короткое имя идентификатора. Например: (Firefox38)
+
+#--------------пункты меню---------------
+&User Agent=Идентификация браузера (&UserAgent)
+Add New=Добавить идентификатор
+Search for UAgent=Поиск идентификатора
+My UserAgent=Текущий идентификатор
+
+#--------------названия диалоговых окон---------------
+UserAgent [String]=Идентификационная строка
+User Agent [Name]=Название идентификатора

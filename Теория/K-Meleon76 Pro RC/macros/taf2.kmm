@@ -1,0 +1,73 @@
+#  K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#
+# ---------- taf2.kmm
+# ---------- Add more GUI options to set up Find-As-You-Type (or TypeAhead Find - TAF) function
+#
+# Dependencies        : main.kmm
+# Preferences         : "accessibility.typeaheadfind.soundURL", "accessibility.typeaheadfind.enablesound", 
+#                       "accessibility.typeaheadfind.enabletimeout", "accessibility.typeaheadfind.timeout", "ui.textSelectBackgroundAttention"
+# Version             : 1.0  --> 19.07.2015  		
+# Author              : rodocop
+# --------------------------------------------------------------------------------
+
+# ----- Type Ahead Find (Page Search)
+
+$on=_("enabled");
+$off=_("disabled");
+
+$_pref_TAF2="accessibility.typeaheadfind";
+
+_taf2_ToggleTAFsound {
+macroinfo=_("Toggle Find As You Type error sound");
+menugrayed=!getpref(BOOL,$_pref_TAF2);
+menuchecked=getpref(BOOL,$_pref_TAF2.".enablesound");
+togglepref(BOOL,$_pref_TAF2.".enablesound");
+statusbar(sub("%s",getpref(BOOL,$_pref_TAF2.".enablesound")?$on:$off,_("Find As You Type error sound %s.")));
+}
+
+_taf2_setTAFsound {
+macroinfo=_("Set Find As You Type sound");
+menugrayed=!getpref(BOOL,$_pref_TAF2);
+$TAFsound_type=prompt(_("'beep', 'default' or exact path to wav-file [ENTER=current || ESC=blank]:"),_("Set sound for search error [String]"),getpref(STRING,"accessibility.typeaheadfind.soundURL"));
+setpref(STRING,$_pref_TAF2.".soundURL", $TAFsound_type);
+statusbar("Search error sound set");
+}
+
+#_taf2_ToggleTAFtimeout {
+#macroinfo=_("Toggle Find As You Type timeout");
+#menugrayed=!getpref(BOOL,$_pref_TAF2);
+#menuchecked=getpref(BOOL,$_pref_TAF2.".enabletimeout");
+#togglepref(BOOL,$_pref_TAF2.".enabletimeout");
+#statusbar(sub("%s",getpref(BOOL,$_pref_TAF2.".enabletimeout")?$on:$off,_("Find As You Type timeout %s.")));
+#}
+
+#_taf2_setTAFtimeout {
+#macroinfo=_("Set Find As You Type timeout");
+#menugrayed=!getpref(BOOL,$_pref_TAF2);
+#$TAFtimeout_time=prompt(_("Enter the timeout value in milliseconds [ENTER=current || ESC='0']:"),_("Set timeout for Page Search [Integer]"),getpref(INT,"accessibility.typeaheadfind.timeout"));
+#setpref(INT,$_pref_TAF2.".timeout", $TAFtimeout_time);
+#statusbar("Current Page search timeout set");
+#}
+
+_taf2_setTAFcolor {
+macroinfo=_("Set colour for highlighting text that matches input");
+$TAFmatch_color=prompt(_("Use the '#rrggbb' format [ENTER=current || ESC=blank]:"),_("Set text highlighter colour [String]"),getpref(STRING,"ui.textSelectBackgroundAttention"));
+setpref(STRING,"ui.textSelectBackgroundAttention", $TAFmatch_color);
+statusbar("Highlighter colour for matched text set");
+}
+
+_taf2_BuildMenu {
+# $__p="Page Search &options";
+$__p="Advanced TAF";
+# setmenu(Find,popup,$__p,-1);
+setmenu("Page &Search",inline,$__p,-1);
+setmenu($__p,macro,_("Sound when no match for input"),"_taf2_ToggleTAFsound",0);
+setmenu($__p,macro,_("Set error sound"),"_taf2_setTAFsound",1);
+#setmenu($__p,macro,_("Search timeout is on"),"_taf2_ToggleTAFtimeout",2);
+#setmenu($__p,macro,_("Set timeout value"),"_taf2_setTAFtimeout",3);
+setmenu($__p,macro,_("Set highlighter colour"),"_taf2_setTAFcolor",4);
+}
+
+## ----------------------------------------
+$OnSetup=$OnSetup."_taf2_BuildMenu;";
+$macroModules=$macroModules."taf2;";

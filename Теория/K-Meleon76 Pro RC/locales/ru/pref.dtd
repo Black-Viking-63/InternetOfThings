@@ -1,0 +1,72 @@
+<!ENTITY prefDialog.title	"Настройки">
+<!--ENTITY prefDialog.title "Расширенные настройки"-->
+<!ENTITY prefDialog.style "width: 80.0em; height: 54.0em;">
+<!ENTITY prefDialog.close.label "Закрыть">
+<!ENTITY prefDialog.close.ackey "З">
+<!ENTITY prefDialog.next.label "Далее">
+<!ENTITY prefDialog.next.ackey "Д">
+<!ENTITY prefDialog.prev.label "Назад">
+<!ENTITY prefDialog.prev.ackey "Н">
+<!ENTITY prefTree.width "width: 16em;">
+<!ENTITY category.label "Категория">
+<!ENTITY category.ackey "а">
+<!ENTITY buildname.label		"K-Meleon 76 Pro">
+<!ENTITY builddate.label		"Панель настроек от 01.04.2017">
+<!ENTITY dialog.accept.label "OK">
+<!ENTITY dialog.cancel.label "Отмена">
+<!ENTITY appearance.label "Внешний вид интерфейса">
+<!ENTITY toolbars.label "Панели инструментов">
+<!ENTITY display.label "Отображение страниц">
+<!ENTITY filters.label "Фильтрация содержимого">
+<!ENTITY browsing.label "Просмотр">
+<!ENTITY tabs.label		"Вкладки">
+<!ENTITY filetypes.label "Обработка файлов">
+<!ENTITY webfind.label "Поиск на веб-страницах">
+<!ENTITY history.label "Журнал посещений">
+<!ENTITY hotlinks.label "Горячие ссылки">
+<!ENTITY privacy.label "Приватность и защита">
+<!ENTITY encryption.label "Шифрование">
+<!ENTITY network.label		"Сеть/Поведение">
+<!ENTITY proxy.label		"Прокси">
+<!ENTITY cache.label		"Кэш">
+<!ENTITY javascript.label "JavaScript">
+<!ENTITY kplugins.label "Модули K-Meleon">
+<!ENTITY kbookmarks.label "Закладки Netscape">
+<!ENTITY kfavorites.label "Избранное IE">
+<!ENTITY khotlist.label "Закладки Opera">
+<!ENTITY kfullscreen.label	"Полноэкранный режим">
+<!ENTITY kmacros.label "Поддержка макросов">
+<!ENTITY kgestures.label "Жесты мышью">
+<!ENTITY whenPressing "При нажатии:">
+<!ENTITY AltKey "Alt">
+<!ENTITY CtrlKey "Ctrl">
+<!ENTITY EnterKey "Enter">
+<!ENTITY ShiftKey "Shift">
+<!ENTITY add "Добавить...">
+<!ENTITY browse "Просмотр...">
+<!ENTITY clear "Очистить">
+<!ENTITY delete "Удалить">
+<!ENTITY edit "Редактировать...">
+<!ENTITY view			"Просмотреть...">
+<!ENTITY exceptions		"Исключение...">
+<!ENTITY macrosRequired "Эта функция требует поддержки макросов">
+<!ENTITY restoreDefault "Восстановить настройки по умолчанию">
+<!ENTITY restartRequired "Для вступления изменений в силу необходим перезапуск K-Meleon">
+<!ENTITY restartMaybeRequired "Для вступления изменений в силу может потребоваться перезапуск K-Meleon">
+<!ENTITY note "Примечание:">
+<!ENTITY WARNING "ПРЕДУПРЕЖДЕНИЕ:">
+<!ENTITY inBackground "В фоне">
+<!ENTITY window.size "Размер окна">
+<!ENTITY window.position "Расположение окна">
+<!ENTITY general "Общие">
+<!ENTITY startup "Внешний вид окна при запуске">
+<!ENTITY pixels "Пикселов">
+<!ENTITY maximized "Максимизированное окно">
+<!ENTITY width "Ширина:">
+<!ENTITY height "Высота:">
+<!ENTITY left "Слева:">
+<!ENTITY top "Сверху:">
+<!ENTITY center "По центру">
+<!ENTITY macrosNote "&note; &macrosRequired;.">
+<!ENTITY restartNote1 "&note; &restartRequired;.">
+<!ENTITY restartNote2 "&note; &restartMaybeRequired;.">

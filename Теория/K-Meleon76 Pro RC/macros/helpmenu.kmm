@@ -1,0 +1,46 @@
+# ----- Help menu options open in new tab if tabs are enabled and the preference is true -----
+$pref_helpmenu="kmeleon.plugins.macros.helpmenu.openintab";
+
+hm_Aplugins {
+macroinfo=_("View information on installed third party plugins");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="about:plugins"; &OpenURL_InNew; } else { id(ID_LINK_ABOUT_PLUGINS); }
+}
+
+hm_Akm {
+macroinfo=_("Display program information, version number and copyright");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="about:"; &OpenURL_InNew; } else { id(ID_APP_ABOUT); }
+}
+
+hm_UserGuide {
+macroinfo=_("View the K-Meleon User's Guide and Reference Manual");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="http://kmeleonbrowser.org/manual/"; &OpenURL_InNew; } else { id(ID_LINK_KMELEON_MANUAL); }
+}
+
+hm_FAQ {
+macroinfo=_("View the K-Meleon FAQ");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="http://kmeleonbrowser.org/wiki/FAQ"; &OpenURL_InNew; } else { id(ID_LINK_KMELEON_FAQ); }
+}
+
+hm_KMforum {
+macroinfo=_("Go to the K-Meleon forums");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="http://kmeleonbrowser.org/forum/"; &OpenURL_InNew; } else { id(ID_LINK_KMELEON_FORUM); }
+}
+
+hm_KMhome {
+macroinfo=_("Go to the K-Meleon home page");
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="http://kmeleonbrowser.org/"; &OpenURL_InNew; } else { id(ID_LINK_KMELEON_HOME); }
+}
+
+#Open_KMReadme{
+#macroinfo=_("View basic information on the K-Meleon project");
+#$__l=getpref(STRING,"general.useragent.locale");
+#open("resource://".($__l=="en-US"?"":("/locales/".$__l))."/readme.html");
+#if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="resource://".($__l=="en-US"?"":("/locales/".$__l))."/readme.html"; &OpenURL_InNew; }
+#else { open("resource://".($__l=="en-US"?"":("/locales/".$__l))."/readme.html"); }
+#}
+Open_KMWiki{
+macroinfo=_("Go to the K-Meleon Wiki");
+#open("http://kmeleon.sourceforge.net/wiki/Welcome";);
+if (getpref(BOOL, $pref_helpmenu)) { $OpenURL="http://kmeleonbrowser.org/wiki/Welcome"; &OpenURL_InNew; }
+else { open("http://kmeleonbrowser.org/wiki/Welcome"); }
+}

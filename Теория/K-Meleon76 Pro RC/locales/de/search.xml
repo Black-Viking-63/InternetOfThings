@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<engines version="1.1" caption="Search Engines for K-Meleon Search Macros">
+<engine caption="LEO English-German Dictionary"
+	url="https://dict.leo.org/englisch-deutsch/"/>
+<engine caption="LEO Deutsch-Französisches Wörterbuch"
+	url="https://dict.leo.org/franz%C3%B6sisch-deutsch/"/>
+<engine caption="LEO Deutsch-Spanisches Wörterbuch"
+	url="https://dict.leo.org/spanisch-deutsch/"/>
+<engine caption="LEO Deutsch-Italienisches Wörterbuch"
+	url="https://dict.leo.org/italienisch-deutsch/"/>
+<engine caption="LEO Deutsch-Chinesisches Wörterbuch"
+	url="https://dict.leo.org/chinesisch-deutsch/"/>
+<engine caption="LEO Deutsch-Russisch Wörterbuch"
+	url="https://dict.leo.org/russisch-deutsch/"/>
+</engines>

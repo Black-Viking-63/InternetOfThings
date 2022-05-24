@@ -1,0 +1,144 @@
+#  K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+# 
+#            restart2.kmm 
+# ---------- Restart K-Meleon for version 2.1(75)-------------------------------------
+#
+# Dependencies    : KM version 2.1 (75) or more recent
+# Resources       : 
+# Preferences     : "k-meleon_restart2.altbutton", "k-meleon_restart2.ask_autoload",
+#   restart2      : "k-meleon_restart2.autoconsole", "k-meleon_restart2.autoload",
+#                 : "k-meleon_restart2.console.contain", "k-meleon_restart2.ensessions",
+#                 : "k-meleon_restart2.filemenu", "k-meleon_restart2.openStart", "k-meleon_restart2.restart"
+# Preferences     : "kmeleon.plugins.sessions.autoload", "kmeleon.plugins.sessions.openStart",
+#   sessions      : "kmeleon.plugins.sessions.ask_autoload"
+# Version         : 1.1  2015-03-23
+# --------------------------------------------------------------------------------
+
+restart2_type{
+setpref(BOOL,"k-meleon_restart2.console.contain", true);
+getpref(BOOL,"k-meleon_restart2.ensessions") ? &restart2_user_sessions:&restart2_normal;
+}
+
+restart2_user_sessions{
+$sess2def=getpref(BOOL, "kmeleon.plugins.sessions.autoload");
+$sess2typ=getpref(STRING , "kmeleon.plugins.sessions.openStart");
+$sess2prompt=getpref(BOOL, "kmeleon.plugins.sessions.ask_autoload");
+setpref(BOOL, "kmeleon.plugins.sessions.autoload", true);
+setpref(STRING , "kmeleon.plugins.sessions.openStart", "Previous Session");
+setpref(BOOL, "kmeleon.plugins.sessions.ask_autoload", false);
+setpref(BOOL, "k-meleon_restart2.autoload", $sess2def);
+setpref(STRING , "k-meleon_restart2.openStart", $sess2typ);
+setpref(BOOL, "k-meleon_restart2.ask_autoload", $sess2prompt);
+setpref(BOOL, "k-meleon_restart2.restart", true);
+id(ID_APP_RESTART); 
+}
+
+restart2_normal{
+id(ID_APP_RESTART); 
+}
+
+restart2_check{
+getpref(BOOL, "k-meleon_restart2.restart") ? &restart2_restore_userses:0;
+}
+
+restart2_restore_userses{
+setpref(BOOL, "k-meleon_restart2.restart", false);
+$sess2def=getpref(BOOL, "k-meleon_restart2.autoload");
+$sess2typ=getpref(STRING, "k-meleon_restart2.openStart");
+$sess2prompt=getpref(BOOL, "k-meleon_restart2.ask_autoload");
+setpref(BOOL, "kmeleon.plugins.sessions.autoload", $sess2def);
+setpref(STRING , "kmeleon.plugins.sessions.openStart", $sess2typ);
+setpref(BOOL, "kmeleon.plugins.sessions.ask_autoload", $sess2prompt);
+}
+
+restart2_sessions{
+menuchecked=(getpref(BOOL,"k-meleon_restart2.ensessions")=="true");
+togglepref(BOOL,"k-meleon_restart2.ensessions");
+if (getpref(BOOL,"k-meleon_restart2.ensessions") ) {
+   statusbar("restart with last session enabled");
+   } else {
+   statusbar("restart with last session disabled");
+   }
+}
+
+restart2_altbutton{
+menuchecked=(getpref(BOOL,"k-meleon_restart2.altbutton")=="true");
+togglepref(BOOL,"k-meleon_restart2.altbutton");
+if (getpref(BOOL,"k-meleon_restart2.altbutton") ) {
+   statusbar("Restart2 - Alternate button enabled");
+   } else {
+   statusbar("Restart2 - Normal button enabled");
+   }
+}
+
+restart2_console{
+menuchecked=(getpref(BOOL,"k-meleon_restart2.autoconsole")=="true");
+togglepref(BOOL,"k-meleon_restart2.autoconsole");
+if (getpref(BOOL,"k-meleon_restart2.autoconsole") ) {
+   statusbar("Restart2 - Automatic error console enabled");
+   } else {
+   statusbar("Restart2 - Automatic error console enabled");
+   }
+}
+
+_restart2_auto_error {
+if (getpref(BOOL,"k-meleon_restart2.console.contain") ) {
+   if (getpref(BOOL,"k-meleon_restart2.autoconsole") ) {
+      opennew("chrome://console2/content/console2.xul");
+      }
+   setpref(BOOL,"k-meleon_restart2.console.contain", false);
+   }
+}
+
+restart2_filemenu {
+menuchecked=(getpref(BOOL,"k-meleon_restart2.filemenu")=="true");
+togglepref(BOOL,"k-meleon_restart2.filemenu");
+if (getpref(BOOL,"k-meleon_restart2.filemenu") ) {
+   statusbar("Restart2 - File CloseWindow menu enabled");
+   } else {
+   statusbar("Restart2 - File CloseWindow menu enabled");
+   }
+} 
+
+
+_restart2_SetAccel {
+setaccel( "SHIFT ALT X", "macros(restart2_type)");
+}
+
+_restart2_BuildMenu {
+# Menus
+if ($VERSION >= 33619974) {
+   getpref(BOOL,"kmeleon.display.accelInMenus")?$__AIM="Restart2" : $__AIM="Restart2" ;
+   getpref(BOOL,"k-meleon_restart2.filemenu")?setmenu("CloseWindow",macro,$__AIM,restart2_type,1):0;
+   setmenu("_Config_General",popup,"Restart2 Options",9);
+   setmenu("Restart2 Options",macro,"Open LastSession",restart2_sessions,0);
+   setmenu("Restart2 Options",macro,"Alternate Button",restart2_altbutton,1);
+   setmenu("Restart2 Options",macro,"Auto Error Console",restart2_console,2);
+   setmenu("Restart2 Options",macro,"File CloseWindow menu",restart2_filemenu,3);   
+   }
+}
+
+_restart2_BuildToolbar {
+# Toolbars
+if ($VERSION >= 33619974) {
+   addtoolbar("KMrestart2") ;
+   addbutton("KMrestart2", "macros(restart2_type)", "Restart2 Options", "Restart K-Meleon - Right click for menu.");
+   if (getpref(BOOL,"k-meleon_restart2.altbutton") ) {
+      setcmdicon("macros(restart2_type)", "altrestart2.bmp[0,24,24]","altrestart2.bmp[1,24,24]","altrestart2.bmp[2,24,24]");
+      } else {
+      setcmdicon("macros(restart2_type)","restart2.bmp[0,24,24]","restart2.bmp[1,24,24]","restart2.bmp[2,24,24]" );
+      }
+   } else {
+   $__R2txt01=_("This K-Meleon version is too old to contain the required resources.");
+   $__R2txt02=_("Restart2 will be set not to load on subsequent K-Meleon starts.");
+   alert($__R2txt01."\n\n".$__R2txt02, _("Restart2.kmm failed to install."), EXCLAIM) ;
+   setpref(BOOL,"kmeleon.plugins.macros.modules.restart2.load", false);
+   }
+}
+
+# ---------------------------------------------------------------------------------
+$OnInit=$OnInit."_restart2_BuildMenu;";
+$OnSetup=$OnSetup."_restart2_BuildToolbar;_restart2_SetAccel;";
+$OnStartup=$OnStartup."restart2_check;";
+$OnLoadOnce=$OnLoadOnce."_restart2_auto_error;";
+$macroModules=$macroModules."restart2;";

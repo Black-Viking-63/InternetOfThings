@@ -1,0 +1,112 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+#
+# useragent ----------------------------------------------------------------------
+# Authors       : naruman (idea - adodupan; basic localization and minor updates - rodocop)
+# Dependencies	: main.kmm
+# Resources	: -
+# Preferences	: 
+# Version       : 0.3   from 11.07.2015
+# ---------------------------------------------------------------------------------
+
+$useragentprf="kmeleon.privacy.useragent";
+
+New_UserAgent{
+macroinfo=_("Enter New UserAgent");
+$New_UserAgent_String=prompt(_("Enter the User Agent string:"),_(" UserAgent [String]"),getclipboard());
+if(length($New_UserAgent_String)>0){
+$New_UserAgent_Name=prompt(_("Enter the User Agent Name:Ex ( Firfox30 )"),_("User Agent[Name]"),substr($New_UserAgent_String,index($New_UserAgent_String,")")+1));
+}
+$New_UserAgent_Name == ""? 0:&UserAgent_Counter;
+}
+UserAgent_Counter{
+$_i=1;$_SI=0 ;
+while($_i>0){
+$_udata=getpref(STRING,$useragentprf.$_i.".name");
+$_SI= $_udata==""?$_i:0;
+$_i= $_SI >0? 0:$_i+1;
+}
+setpref(STRING,$useragentprf.$_SI.".name",$New_UserAgent_Name);
+setpref(STRING,$useragentprf.$_SI.".string",$New_UserAgent_String);
+setpref(STRING,$useragentprf.$_SI.".sites","");
+
+$_Count=getpref(INT,$useragentprf.".Count");
+
+setpref(INT,$useragentprf.".Count",$_Count+1);
+
+setmenu("&User Agent",macro,$New_UserAgent_Name,"useragent_Add(".$_SI.")");
+}
+
+UserAgent_find{
+macroinfo=_("Search for New User Agent");
+$_find_UAgent="http://www.useragentstring.com/pages/useragentstring.php";
+opentab($_find_UAgent);
+}
+
+UserAgent_check{
+macroinfo=_("Check current UserAgent on mybrowserinfo.com=");
+$_UAgent_State="http://www.mybrowserinfo.com";
+opentab($_UAgent_State);
+}
+
+useragent_Menu{
+	setmenu(PrivacySecurity,popup,"&User Agent");
+	setmenu("&User Agent",macro,"Add New",New_UserAgent);
+	setmenu("&User Agent",macro,"Search for UAgent",UserAgent_find);
+	setmenu("&User Agent",macro,"My UserAgent",UserAgent_check);
+	setmenu("&User Agent",separator,-1);
+
+	
+	$_i=1; 
+	$_uadata="";
+	while($_i>0){
+	$_uadata=getpref(STRING,$useragentprf.$_i.".name");
+	$_uadata==""?0:setmenu("&User Agent",macro,$_uadata,"useragent_Add(".$_i.")");
+	
+		if($_uadata==""){
+		setpref(INT,$useragentprf.".Count",$_i-1);
+		$_i=0;
+		
+		}else{
+		$_i=$_i+1;
+		}
+	
+	
+	}
+
+}
+
+useragent_Add{
+	macroinfo="Set User Agent  for the current web page";
+	menugrayed=(index(getpref(STRING,$useragentprf.$ARG.".sites"),hostname($URL))!=-1);
+	setcheck("useragent_Add2",(index(getpref(STRING,$useragentprf.$ARG.".sites"),hostname($URL))!=-1));
+	$PageHost=hostname($URL);
+	&useragent_Add2;
+
+}	
+useragent_Add2{
+	$UASites=getpref(STRING,$useragentprf.$ARG.".sites");
+	$cuntlist=getpref(INT,$useragentprf.".Count");
+
+	$_i=1; 
+	$_uadata="";
+	while($_i>0){
+	$SitesList=getpref(STRING,$useragentprf.$_i.".sites");
+		if((index($SitesList,$PageHost)==-1) and ($ARG==$_i)){
+		setpref(STRING,$useragentprf.$_i.".sites",$UASites.$PageHost.";");
+		}else{
+			if((index($SitesList,$PageHost)!=-1) and ($ARG!=$_i)){
+			$NewSitesList=sub($PageHost.";","",$SitesList);
+		setpref(STRING,$useragentprf.$_i.".sites",$NewSitesList);
+			
+			}
+			
+		}
+	
+	$_i=($_i > $cuntlist)?0:$_i+1;
+	}
+}
+
+$OnInit=$OnInit."useragent_Menu;";
+# --------------------------------------------------------------------------------
+$macroModules=$macroModules."useragent;";
+

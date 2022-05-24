@@ -1,0 +1,35 @@
+<SCRIPT LANGUAGE="JavaScript"> 
+function runK(location) {
+
+var shell = new ActiveXObject("WScript.Shell");
+shell.run("\"G:\\applications-x\\KMplus\\k-meleon.exe\" \"" + "chrome://coralietab/content/container.html?url=0," + location + "\"");
+
+}
+
+var oWindow = window.external.menuArguments;                
+if (oWindow != null) {
+        var oDocument = oWindow.document;        
+        var sText = null;        
+
+        var oEvent = oWindow.event;                                
+        if ((oEvent.type == "MenuExtUnknown") || (oEvent.type == "MenuExtImage") || (oEvent.type == "MenuExtAnchor")) {
+                var oElement = oDocument.elementFromPoint(oEvent.clientX, oEvent.clientY);
+                var oAnchor = oElement;
+                while ((oAnchor.tagName != "A") && (oAnchor.tagName != "AREA") && (oAnchor.tagName != "HTML")) {
+                        oAnchor=oAnchor.parentElement;
+                }
+
+                if (oAnchor.tagName=="A" || oAnchor.tagName=="AREA") {
+                        sText = oAnchor.href;
+                } else if (oAnchor.tagName=="HTML" && oElement.tagName=="IMG") {
+                        sText = oElement.src;
+                }
+        }
+
+
+        if ((sText != null) && (sText.length != 0)) {
+                var location = new String(sText);
+                runK(location);
+        }
+}
+</SCRIPT>

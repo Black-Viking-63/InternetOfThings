@@ -1,0 +1,8 @@
+# K-Meleon Localization file
+# locale: ru
+
+Disabled HTML5media=Выключение HTML5-медиа
+Toggle HTML5 media play on/off. When OFF - Flash media may be played instead if supported by site=Выключатель HTML5-медиа. (Если выкл. - будет по возможности использован Flash)
+
+HTML5 is used now=Воспроизведение HTML5-видео и аудио включено
+HTML5 is disabled now=HTML5 не используется (Если возможно - используется Flash)

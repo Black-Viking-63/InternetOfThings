@@ -1,0 +1,20 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ----------  adds command in linksave menu to pass rss/atom feedsURL to newsfox----------------------------------------------------------
+#
+# thankyou desga and jamesD------------------------------------------------------------------------------------------------------------------
+
+
+
+addfeed{
+$FEED = gensub("?", "%3F", "1" ,$LinkURL);
+opentab("chrome://newsfox/content/addurl.xul?".$FEED);
+} 
+
+addfeed_BuildMenu{
+setmenu(LinkSave,macro,"Add RSSFeed",addfeed);
+}
+
+$OnInit=$OnInit."addfeed_BuildMenu;";
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."addfeed;"; 

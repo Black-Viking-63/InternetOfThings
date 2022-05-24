@@ -1,0 +1,85 @@
+﻿# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#
+# ---------- HTML5disable.kmm
+# ---------- Toggle HTML5 video and audio (button) -------------------------------
+# ---Allows quickly toggle ability to play HTML5 media objects like Youtube videos 
+# ---and use Flash instead - if any present and supported by site
+#
+# Dependencies:	main.kmm
+# Resources:
+# Preferences:	"extensions.lastPlatformVersion"
+# 		"media.fragmented-mp4.enabled"
+# 		"media.fragmented-mp4.exposed"
+# 		"media.windows-media-foundation.enabled"
+# 		"media.windows-media-foundation.play-stand-alone"
+# 		"media.windows-media-foundation.use-dxva"
+# 		"media.wmf.enabled"
+#		"media.mediasource.enabled"
+#		"media.webm.enabled"
+#		"media.ogg.enabled"
+#		"media.wave.enabled"  
+# Author:	rodocop (based on George Hall job)
+# Version:	1.0
+# Date:		2017-03-08
+# -------------------------------------------------------------------------
+
+_HTML5media_perfcheck {
+$_HTML5media_PStatus = getpref(BOOL, "media.windows-media-foundation.enabled");
+} 
+
+_HTML5media_toggle {
+
+#if (getpref(STRING, "extensions.lastPlatformVersion" ) >= "44.0") {
+#menuchecked=getpref( BOOL , "media.wmf.enabled" )==false;
+#menuchecked=$_HTML5media_PStatus;
+#togglepref(BOOL, "media.wmf.enabled") ; } else {
+
+if (getpref(STRING, "extensions.lastPlatformVersion" ) >= "38.0") {
+menuchecked=getpref( BOOL , "media.windows-media-foundation.enabled" )==false;
+#menuchecked=$_HTML5media_PStatus;
+togglepref(BOOL, "media.fragmented-mp4.enabled") ;
+togglepref(BOOL, "media.fragmented-mp4.exposed") ;
+togglepref(BOOL, "media.mediasource.enabled") ;
+togglepref(BOOL, "media.webm.enabled") ;
+togglepref(BOOL, "media.ogg.enabled") ;
+togglepref(BOOL, "media.wave.enabled") ;
+togglepref(BOOL, "media.windows-media-foundation.enabled") ;
+togglepref(BOOL, "media.windows-media-foundation.use-dxva") ; } else {
+
+if (getpref(STRING, "extensions.lastPlatformVersion" ) < "38.0") {
+menuchecked=getpref( BOOL , "media.windows-media-foundation.enabled" )==false;
+#menuchecked=$_HTML5media_PStatus
+togglepref(BOOL, "media.fragmented-mp4.enabled") ;
+togglepref(BOOL, "media.mediasource.enabled") ;
+togglepref(BOOL, "media.webm.enabled") ;
+togglepref(BOOL, "media.ogg.enabled") ;
+togglepref(BOOL, "media.wave.enabled") ;
+togglepref(BOOL, "media.windows-media-foundation.enabled") ;
+togglepref(BOOL, "media.windows-media-foundation.play-stand-alone") ;
+togglepref(BOOL, "media.windows-media-foundation.use-dxva") ; }}
+
+if (getpref(BOOL,"media.windows-media-foundation.enabled")==true) {
+statusbar(_("HTML5 is used now"));
+} else {
+statusbar(_("HTML5 is disabled now"));
+}
+checkbutton("HTML5","macros(_HTML5media_toggle)",getpref( BOOL , "media.windows-media-foundation.enabled" )) ;
+}
+
+_HTML5media_BuildMenu {
+setmenu("&Pro", macro, _("Disabled HTML5media"), _HTML5media_toggle, -1);
+}
+
+_HTML5media_Button {
+#addtoolbar("HTML5");
+pluginmsg(toolbars,"AddToolbar","HTML5, 16,16","");
+addbutton("HTML5","macros(_HTML5media_toggle)", _("Disabled HTML5media"),_("Toggle HTML5 media play on/off. When OFF - Flash media may be played instead if supported by site"));
+#setcmdicon("macros(_HTML5media_toggle)","HTML5enabled.ico","HTML5disabled.ico");
+setbuttonimg("HTML5","macros(_HTML5media_toggle)","HTML5disabled.ico","HTML5enabled.ico");
+checkbutton("HTML5","macros(_HTML5media_toggle)",getpref( BOOL , "media.windows-media-foundation.enabled" )) ;
+}
+
+#$OnStartup=$OnStartup."_HTML5media_perfcheck;";
+$OnInit=$OnInit."_HTML5media_BuildMenu;_HTML5media_Button;";
+# -------------------------------------------------------------------------
+$macroModules=$macroModules."HTML5mediatoggle;";

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<engines version="1.1" caption="Search Engines for K-Meleon Search Macros">
+<engine caption="LEO Russian-German Dictionary"
+	url="https://dict.leo.org/russisch-deutsch/"/>
+<engine caption="Miltitran Ru-Eng"
+	url="http://multitran.com/m.exe?SHL=2&amp;l1=2&amp;l2=1&amp;s="/>
+<engine caption="Miltitran Ru-Germ"
+	url="http://multitran.com/m.exe?SHL=2&amp;l1=2&amp;l2=3&amp;s="/>
+<engine caption="Miltitran Ru-Esp"
+	url="http://multitran.com/m.exe?SHL=2&amp;l1=2&amp;l2=5&amp;s="/>
+<engine caption="Miltitran Ru-Fra"
+	url="http://multitran.com/m.exe?SHL=2&amp;l1=2&amp;l2=4&amp;s="/>
+</engines>

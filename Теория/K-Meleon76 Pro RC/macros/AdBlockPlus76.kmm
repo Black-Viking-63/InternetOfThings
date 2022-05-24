@@ -1,0 +1,200 @@
+#ß  UTF-8 / K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#
+# ----------------------  AdBlockPlusKM.kmm   ----------------------
+#  Version:      v8 / 2016-03-16
+#  Forum:	http://kmeleon.sourceforge.net/forum/read.php?9,132173
+#  MENU:	right-click on BUTTON, or use menu Tools > AdBlock Plus (ABP7)  / or right-click on image properties
+#  BUTTON:	Toolbar "AdBlock Plus (ABP7)"  (can be hidden via menu View/Toolbars)
+#  Ressources:	Needs AdBlockPlus addon
+#  Ressources:	Needs a 2-pic image "adblockplus.bmp" in folder K-Meleon/skins/default
+#  Author:     	various (naruman, guenter, last mod by siria+rodocop)
+#  This kmm is based on the "load.kmm" in narumans xpi addon, plus a traditional macro button and menu
+#-------------------------------------------------------------------------------------------
+
+
+_ABP_checksub{
+$PROFILE=getfolder(ProfileFolder);
+$SUBSRC=getfolder(RootFolder)."\\browser\\defaults\\profile\\adblockplus";
+$EXISTS=fileexists($PROFILE."\\adblockplus\\patterns.ini");
+$EXISTS==true ? 0 : macros(_ABP_newprofile);
+}
+
+_ABP_newprofile{
+mkdir($PROFILE."\\adblockplus//");
+$PATTCOPY=copyfile($SUBSRC."\\patterns.ini", $PROFILE."\\adblockplus\\patterns.ini");
+$CSSCOPY=copyfile($SUBSRC."\\elemhide.css", $PROFILE."\\adblockplus\\elemhide.css");
+macros(_ABP_info);
+} 
+
+_ABP_info{
+$CSSCOPY==true ? alert(_("AdBlock Plus with default light subscription successfully installed for this profile!"),_("Subscription installed"), INFO) : alert(_("AdBlock Plus subscriptions seems not to install! Check the folder 'adblockplus' in your profile! If absent - place it there manually from the addon package"),_("Attention!"), EXCLAIM);
+}
+
+# name needed many times, for menu + button.  Change as you like HERE
+$ABP7_name="AdBlock Plus KM";
+
+$ABP7_command="macros(ABP7_Toggle)";
+# button alternative:  $ABP7_command="macros(ABP7_Items)";
+
+$ABP7_Enabled="extensions.adblockplus.enabled";
+$ABP7_FlashJava="extensions.adblockplus.frameobjects";
+$ABP7_Placeholders="extensions.adblockplus.fastcollapse";
+$ABP7_Count="extensions.adblockplus.savestats";
+$ABP7_EditSite="extensions.adblockplus.EditSite";
+$ABP7_BlockItem="extensions.adblockplus.Blockitem";
+$ABP7_BlockitemType="extensions.adblockplus.BlockitemType";
+
+ABP7_Toggle{
+#macroinfo="Toggle AdBlock Plus Pref On/Off";
+macroinfo=_("Toggle AdBlock Plus On/Off");
+menuchecked=getpref(BOOL,$ABP7_Enabled);
+togglepref(BOOL,$ABP7_Enabled);
+&_ABP7_SyncButton;
+statusbar(sub("%s",getpref(BOOL,$ABP7_Enabled)?$on:$off,_("Adblock Plus %s")));
+}
+
+ABP7_Filters{
+#macroinfo="Open \"chrome://adblockplus/content/ui/filters.xul\"";
+macroinfo=_("Open filters list");
+$OpenURL="chrome://adblockplus/content/ui/filters.xul";
+&OpenURL_InNewWindow;
+# optional in tab:     &OpenURL_InNew;
+&_ABP7_SyncButton;
+}
+
+ABP7_Items{
+#macroinfo="Open \"about:adblockplus\"";
+macroinfo=_("Open live blocking GUI");
+setpref(STRING,$ABP7_EditSite, $URL);
+open("about:adblockplus");
+&_ABP7_SyncButton;
+}
+
+ABP7_FlashJava{
+#macroinfo="Toggle pref \"extensions.adblockplus.frameobjects\"";
+macroinfo=_("Toggle blocking-buttons on framed rich-media");
+menuchecked=getpref(BOOL,$ABP7_FlashJava);
+togglepref(BOOL,$ABP7_FlashJava);
+&_ABP7_SyncButton;
+}
+
+ABP7_Placeholders{
+#macroinfo="Toggle pref \"extensions.adblockplus.fastcollapse\"";
+macroinfo=_("Toggle placeholders display on blocked objects");
+menuchecked=getpref(BOOL,$ABP7_Placeholders);
+togglepref(BOOL,$ABP7_Placeholders);
+&_ABP7_SyncButton;
+}
+
+ABP7_Count{
+#macroinfo="Toggle pref \"extensions.adblockplus.savestats\"";
+macroinfo=_("Toggle counting hits of every filter");
+menuchecked=getpref(BOOL,$ABP7_Count);
+togglepref(BOOL,$ABP7_Count);
+&_ABP7_SyncButton;
+}
+
+ABP7_Image{
+# macroinfo="Toggle 2 prefs and open \"chrome://adblockplus/content/ui/KMcomposer.xul\"";
+macroinfo=_("Block current image");
+menugrayed=(hostname($URL)=="");
+setpref(STRING,$ABP7_BlockItem, $ImageURL);
+setpref(STRING,$ABP7_BlockitemType, "image");
+$OpenURL="chrome://adblockplus/content/ui/composer.xul";
+&OpenURL_InNewWindow;
+# optional in tab:     &OpenURL_InNew;
+&_ABP7_SyncButton;
+}
+
+ABP7_wwwForum{
+macroinfo=_("Open the page for this extension/macro in the K-Meleon forum");
+$OpenURL="http://kmeleon.sourceforge.net/forum/read.php?9,132173";
+&OpenURL_InNew;
+}
+
+#=========   BUTTON
+
+_ABP7_BuildButton{
+$_size="16,16";
+$_icons="adblockplus.bmp[0],adblockplus.bmp[1]" ;
+##  $_command = "macros(ABP7_Toggle)" ;
+$_command = $ABP7_command;
+$_tooltip= "Toggle AdBlock Plus On/Off. Right-click for more options";
+$_toolbar= $ABP7_name;
+$_right_menu=$ABP7_name;
+$_buttonname="AdBlockPlus7";
+
+# SYNTAX: pluginmsg(toolbars, "AddButton", "<ToolbarName>, <ButtonName>, <Command>, <MenuName>, <TooltipText>, <ButtonWidth>, <ButtonHeight>, hot.bmp[0], cold.bmp[0], dead.bmp[0]"); 
+# Next line creates a new toolbar, but is simply ignored if name already exists, so no harm: 
+pluginmsg(toolbars,"AddToolbar",$_toolbar.",".$_size);
+pluginmsg(toolbars,"AddButton",$_toolbar.",".$_buttonname.",".$_command.",".$_right_menu.",".$_tooltip.",".$_size.",".$_icons);
+#
+$_toolbar=""; $_icons=""; $_size=""; $_right_menu=""; $_buttonname=""; $_tooltip=""; $_command=""; 
+#
+$OnLoadOnce=$OnLoadOnce."_ABP7_SyncButton;";
+#####
+&_ABP7_getKMver;
+}
+
+_ABP7_SyncButton{
+if (getpref(BOOL,"extensions.adblockplus.syncButtonPics")) {
+	getpref(BOOL,$ABP7_Enabled) ? $_z="0" : $_z="1";
+	if ($_ABP7_KMver=="75") 
+	setbuttonimg($ABP7_name,$ABP7_command,"adblockplus.bmp[".$_z.",16,16]","adblockplus.bmp[0,16,16]");
+	else {
+	$_x="COLD,adblockplus.bmp[".$_z."]";
+	pluginmsg(toolbars,"SetButtonImage",$ABP7_name.",".$ABP7_command.",".$_x);
+	}
+}else{
+	getpref(BOOL,$ABP7_Enabled) ? $_z="1" : $_z="0";
+	pluginmsg(toolbars,"CheckButton",$ABP7_name.",".$ABP7_command.",".$_z);
+}}
+
+ABP7_OptSyncButton{
+macroinfo=_("Show ABP button permanently pressed when active");
+menuchecked=!getpref(BOOL,"extensions.adblockplus.syncButtonPics");
+#&_ABP7_SyncButton;
+togglepref(BOOL,"extensions.adblockplus.syncButtonPics");
+#  Reset before updating button state:
+if ($_ABP7_KMver=="75") 
+setbuttonimg($ABP7_name,$ABP7_command,"adblockplus.bmp[1,16,16]","adblockplus.bmp[0,16,16]");
+else {
+$_x="COLD,adblockplus.bmp[1]";
+pluginmsg(toolbars,"SetButtonImage",$ABP7_name.",".$ABP7_command.",".$_x);
+}
+$_z="0"; pluginmsg(toolbars,"CheckButton",$ABP7_name.",".$ABP7_command.",".$_z);
+&_ABP7_SyncButton;
+}
+
+_ABP7_getKMver{
+######  version needed for changing button pics without keeping it pressed, in KM75 old command changes ALL pics
+$_x = iniread("Build","Milestone","", getfolder(RootFolder)."\\platform.ini");
+substr($_x,0,2)>"30" ? $_ABP7_KMver="75" : $_ABP7_KMver="1";
+}
+
+#=========   BUTTON  END
+
+_ABP7_BuildMenu{
+$_menu=$ABP7_name;
+setmenu("&Pro",popup,$_menu,-1);
+setmenu($_menu,macro,"AdBlock Plus On/Off","ABP7_Toggle");
+setmenu($_menu,macro,"Filter preferences","ABP7_Filters");
+setmenu($_menu,separator,-1);
+#setmenu($_menu,macro,"Live Block items on this page","ABP7_Items");
+setmenu($_menu,separator,-1);
+setmenu($_menu,macro,"Show tabs on Flash and Java","ABP7_FlashJava");
+setmenu($_menu,macro, "Show placeholders for blocked elements","ABP7_Placeholders");
+setmenu($_menu,macro,"Count filter hits","ABP7_Count");
+setmenu($_menu,separator,-1);
+setmenu($_menu,macro,"Keep button pressed","ABP7_OptSyncButton");
+setmenu($_menu,separator,-1);
+setmenu($_menu,macro,"KM-Forum for this addon","ABP7_wwwForum");
+#
+setmenu("ImageProperties",macro,"Adblock Image","ABP7_Image");
+}
+
+#============    at browser start
+$OnSetup=$OnSetup."_ABP7_BuildButton;"."_ABP_checksub;";
+$OnInit=$OnInit."_ABP7_BuildMenu;";
+#___________________________________________
+$macroModules=$macroModules."AdBlockPlusKM;";

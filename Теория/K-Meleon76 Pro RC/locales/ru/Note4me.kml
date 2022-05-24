@@ -1,0 +1,25 @@
+﻿# K-Meleon Localization file
+# for Note4me.kmm
+
+Copy selected text to clipboard for appending to Note4me=Скопировать выделенное для добавления в файл Note4me
+
+Send to Note4me=Отправить в файл заметок Note4me
+View Notes in New Tab=Открыть заметки Note4me в новой вкладке
+View Notes in TextEditor=Открыть заметки Note4me в текстовом редакторе
+Delete all Notes=Очистить заметки
+
+Enter output folder of your choice.=Выберите папку хранения заметок.
+Cancel returns to default=Нажмите 'Отмена' для сохранения в папке профиля (по умолчанию)
+
+To use Notes first select the place for note-storage file Note4me.txt=Перед началом использования задайте расположение файла заметок
+To change note-storage folder later press 'CTRL+4' keys=Чтобы изменить место хранения заметок позже, нажмите 'Ctrl+4'
+
+Are you sure to delete all Notes?=Вы уверены, что хотите удалить ВСЕ записи?
+YES - delete ALL notes and backups=ДА - будут удалены заметки и резервная копия
+NO - clear notes but keep backup=НЕТ - будут удалены только заметки
+CANCEL - do NOT delete anything!=ОТМЕНА - не удалять ничего!
+Confirm deleting Notes=Подтвердите удаление заметок
+
+Notes and backup were cleared!=Заметки и резервная копия удалены!
+Notes were cleared. Backup is in file=Заметки удалены. Резервная копия осталась в файле
+Error! File is absent!=Ошибка! Нет файла заметок!

@@ -1,0 +1,67 @@
+Generated File. Do not edit.
+
+[HEADER]
+Version|0.17|$
+Arch|x86-msvc|$
+
+[PLUGINS]
+npAdobeAAMDetect32.dll|$
+C:\Program Files (x86)\Adobe\Adobe Creative Cloud\Utils\npAdobeAAMDetect32.dll|$
+3.0.0.0|$
+1476278898000|0|0|0|$
+Creative Cloud Desktop Plugin.v_3_0_0_0|$
+AdobeAAMDetect|$
+1
+0|application/x-adobeaamdetect|AdobeAAMDetect||$
+nppdf32.dll|$
+C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Air\nppdf32.dll|$
+21.7.20102.65519|$
+1636715940000|0|0|0|$
+Adobe PDF Plug-In For Firefox and Netscape 21.7.20102|$
+Adobe Acrobat|$
+7
+0|application/pdf|Acrobat Portable Document Format|pdf|$
+1|application/vnd.adobe.pdfxml|Adobe PDF in XML Format|pdfxml|$
+2|application/vnd.adobe.x-mars|Adobe PDF in XML Format|mars|$
+3|application/vnd.fdf|Acrobat Forms Data Format|fdf|$
+4|application/vnd.adobe.xfdf|XML Version of Acrobat Forms Data Format|xfdf|$
+5|application/vnd.adobe.xdp+xml| Acrobat XML Data Package|xdp|$
+6|application/vnd.adobe.xfd+xml|Adobe FormFlow99 Data File|xfd|$
+NPSPWRAP.DLL|$
+C:\Program Files (x86)\Microsoft Office\root\Office16\NPSPWRAP.DLL|$
+16.0.12325.20144|$
+1647256235220|0|0|0|$
+The plugin allows you to have a better experience with Microsoft SharePoint|$
+Microsoft Office|$
+2
+0|application/x-sharepoint|SharePoint Plug-in for Firefox||$
+1|application/x-sharepoint-uc|||$
+npcades.dll|$
+C:\Program Files (x86)\Crypto Pro\CAdES Browser Plug-in\npcades.dll|$
+2.0.2704.0|$
+1644718620000|0|0|0|$
+CryptoPro CAdES NPAPI Browser Plug-in|$
+CryptoPro CAdES NPAPI Browser Plug-in|$
+1
+0|application/x-cades|||$
+npIETab.dll|$
+E:\GitHub\InternetOfThings\Теория\K-Meleon76 Pro RC\browser\plugins\npIETab.dll|$
+4.0.1.0|$
+1390194106000|0|0|0|$
+IE Tab plugin|$
+IE Tab plugin|$
+1
+0|application/x-ietab|npietab||$
+NPSWF32_27_0_0_130.dll|$
+E:\GitHub\InternetOfThings\Теория\K-Meleon76 Pro RC\browser\plugins\NPSWF32_27_0_0_130.dll|$
+27.0.0.130|$
+1505229810000|0|0|0|$
+Shockwave Flash 27.0 r0|$
+Shockwave Flash|$
+2
+0|application/x-shockwave-flash|Adobe Flash movie|swf|$
+1|application/futuresplash|FutureSplash movie|spl|$
+
+[INVALID]
+C:\Program Files (x86)\Adobe\Adobe Creative Cloud\Utils\npAdobeAAMDetect64.dll|$
+1476278898000|$

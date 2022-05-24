@@ -1,0 +1,10 @@
+# K-Meleon Localization file
+# locale:	ru
+# for:		imgrotate.kmm
+
+Image Rotate=Повернуть изображение
+Rotate 90°=На 90°
+Rotate 180°=На 180°
+Rotate 270°=На 270°
+Mirror Flip=Отзеркалить
+Restore Angle=Отменить поворот

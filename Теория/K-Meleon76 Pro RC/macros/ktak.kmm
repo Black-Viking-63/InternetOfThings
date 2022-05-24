@@ -1,0 +1,23 @@
+﻿# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- Ktak.ru video saver for Youtube  -------------------------------------------------------------------
+# Description	: replaces URL to the page where to download video 
+#
+# Version	: 1.0
+# Date		: 15/03/2017
+# Author	: rodocop
+# ------------------------------------------------------------------------------------------------------------------
+
+ktak_replace{
+$HOST=hostname($URL);
+$HOST=="www.youtube.com" ? $SUB=gsub("https://www.youtube.com/watch?v=","http://ktak.ru/",$URL):0;
+open($SUB);
+}
+
+ktak_setaccel{
+setaccel("CTRL ALT SHIFT VK_F2","macros(ktak_replace)");
+}
+
+$OnInit=$OnInit."ktak_setaccel;";
+#-----------------------------------------
+$macroModules=$macroModules."clearcache;";

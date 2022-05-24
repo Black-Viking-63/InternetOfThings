@@ -1,0 +1,30 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#
+# ---------- xpinstallext.kmm
+# ---------- Switch for addon xpi intstall to KM  ----------------
+#
+# Dependencies	: main.kmm 
+# Resources	    : 
+# Preferences	: "kmeleon.install_firefox_extension"
+# Author        : JamesD  
+# Version       : 0.3   2014-09-03
+# -------------------------------------------------------------------------
+
+_xpinstallext_perfcheck {
+$_xpinstallext_PStatus = getpref(BOOL, "kmeleon.install_firefox_extension");
+$_xpinstallext_PStatus ? 0 : setpref(BOOL, "kmeleon.install_firefox_extension", false) ; 
+}
+
+_xpinstallext_toggle {
+menuchecked=getpref( BOOL , "kmeleon.install_firefox_extension" )==true;
+togglepref(BOOL, "kmeleon.install_firefox_extension")  ; 
+}
+
+_xpinstallext_BuildMenu {
+setmenu("&Edit", macro, _("Set FireFox extension install"), _xpinstallext_toggle, -1);
+}
+
+$OnStartup=$OnStartup."_xpinstallext_perfcheck;";
+$OnInit=$OnInit."_xpinstallext_BuildMenu;";
+# -------------------------------------------------------------------------
+$macroModules=$macroModules."xpinstallext;";

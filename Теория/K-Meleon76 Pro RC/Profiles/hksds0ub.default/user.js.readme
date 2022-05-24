@@ -1,0 +1,117 @@
+/* ----- DO NOT EDIT ANYTHING ABOVE THIS LINE -------------------------------------------- */
+
+/*Внешний вид+панели инструментов*/
+user_pref("general.useragent.locale, "ru");	//русский интерфейс
+user_pref("kmeleon.display.title", "K-Meleon 75 Pro");	//название в заголовке окна
+user_pref("kmeleon.display.hideTitleBar", false);	//не скрывать заголовок окна
+user_pref("kmeleon.tabs.maxWidth", 35);	//ширина табов
+user_pref("kmeleon.display.toolbars_line", true);	//отображение разделителей тулбаров (отсутствует в 75)
+user_pref("browser.chrome.favicons", true);	//покаывать ВСЕ возможные фавиконы
+
+
+//Отображение страниц+Языки
+user_pref("intl.accept_languages", "ru,ru-RU,en-US,en");	//языки веб-страниц
+user_pref("intl.charset.default", "UTF-8");	//кодировка по умолчанию
+
+//Просмотр
+user_pref("browser.tabs.warnOnClose", false);	//вкладки – спрашивать при закрытии
+user_pref("browser.link.open_newwindow", 3);	//контроль окон – таб вместо окна
+user_pref("browser.link.open_external", 3 	//контроль окон – внешние ссылки в таб
+user_pref("kmeleon.plugins.macros.selected.openurl", "ID_OPEN_LINK_IN_NEW_TAB");	//выделенный текст в новом табе
+user_pref("kmeleon.display.newWindowOpenAs", 3);	//при открытии новых табов показывать «эту»:
+user_pref("kmeleon.display.newWindowURL", "about:about");	//about:about
+user_pref("kmeleon.plugins.macros.docinfo.forceTab.images", true);	//изображения страницы в новой вкладке (нет в 75)
+user_pref("kmeleon.plugins.macros.docinfo.forceTab.links", true);	//список ссылок страницы в новой вкладке (=//=)
+user_pref("kmeleon.plugins.macros.docinfo.forceTab.linkedImages", true);	//изображения по ссылкам страницы в новой вкладке (=//=)
+
+//Вкладки
+user_pref("kmeleon.tabs.onCloseOption", 2);	//при закрытии таба фокус на прошлую активную вкладку
+user_pref("browser.tabs.warnOnClose", false);	//не предупреждать при закрытии КМ с более чем 1 табом
+user_pref("kmeleon.display.NewWindowHasUrlFocus", true);	//в новых вкладках фокус – в адресной строке
+
+//Обработка файлов
+user_pref("kmeleon.download.closeDownloadDialog", true);	//закрывать диалог загрузки по завершении
+user_pref("browser.download.folderList", 2);	//использовать установленную пользователем папку для загрузок
+user_pref("browser.download.lastDir.savePerSite", true);	//помнить папку сохранения для каждого сайта отдельно
+
+//Поиск
+user_pref("kmeleon.general.searchEngineName", "Google - I'm feeling lucky");	//поиск по умолчанию
+user_pref("kmeleon.plugins.searchbarext.open", 2);	//открывать выдачу поиска из панели в новой активной вкладке
+user_pref("kmeleon.plugins.searchbarext.pastego", true);	//искать автоматически при копировании в панель поиска
+
+//Сеть/Производительность
+user_pref("network.prefetch-next", false);	//отключить предзагрузку по ссылкам (безопасность)
+//user_pref("browser.cache.disk.max_entry_size", XXX);	//кэш на диск файлов размером до ХХХ/8
+user_pref("browser.cache.disk.enable", false);	//отключить дисковый кэш
+user_pref("browser.cache.memory.max_entry_size", -1);	//кэш в памяти объектов любого размера
+
+//JavaScript
+user_pref("dom.disable_window_move_resize", true);	//запрет JS изменять размеры и положение окон
+user_pref("dom.disable_window_status_change", true);	//запрет JS скрывать статусбар
+user_pref("dom.event.contextmenu.enabled", false);	//запрет JS отключать контекстное меню
+user_pref("dom.event.clipboardevents.enabled", false);	//запрет JS добавлять что-то в клипборд при копировании
+user_pref("dom.max_script_run_time", 12);	//таймаут работы скрипта (потом будет предупреждение)
+
+//Сессии
+user_pref("kmeleon.plugins.sessions.openStart", "Previous Session"); //открывать предыдущую сессию при старте браузера
+
+//Безопасность – DoNotTrack, TLS, media
+user_pref("privacy.donottrackheader.enabled", true);	//не отслеживать меня
+user_pref("media.enforce_same_site_origin", true);	//загружать html5-медиаконтент только с текущего сайта
+user_pref("security.mixed_content.block_active_content", true);	//блокировка смешанного контента (потенциальная угроза)
+user_pref("security.mixed_content.block_display_content", true);	//блокировка смешанного контента (потенциальная угроза)
+user_pref("security.ssl3.dhe_rsa_camellia_128_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.dhe_rsa_camellia_256_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.ecdhe_ecdsa_rc4_128_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.ecdhe_rsa_rc4_128_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.rsa_camellia_128_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.rsa_camellia_256_sha", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.rsa_rc4_128_md5", false);	//отключение небезопасных шифров
+user_pref("security.ssl3.rsa_rc4_128_sha", false);	//отключение небезопасных шифров
+user_pref("security.tls.version.min", 1);	//работать с шифрованием не ниже, чем: '2' для TLS 1.1, '1' для TLS 1.0)
+
+//FAYT  (быстрый поиск по мере набора на странице)
+user_pref("accessibility.typeaheadfind.linksonly", false);	//быстрый поиск НЕ только в ссылках
+user_pref("accessibility.typeaheadfind.soundURL", "default");	//более приятный звук при ошибке поиска по маске
+user_pref("ui.textSelectBackgroundAttention", "//cc0033");	//цвет выделения текста, найденного FAYT 
+
+//Работа мышью
+user_pref("ui.click_hold_context_menus", true);	//контекст-меню по удержанию ЛКМ
+user_pref("layout.word_select.eat_space_to_next_word", false);	//при выделении слов двойным ЛКМ не захватывать пробел 			после слова
+user_pref("ui.use_activity_cursor", true);	//пока страница грузится, курсор «крутит колесико»
+
+//Оптимизация сетевых соединений и отрисовки страниц (скорость и безопасность)
+user_pref("content.notify.ontimer", true);	//необходимо для работы других префок content.notify
+user_pref("content.notify.interval", 120000);	//интервал между перерисовками страницы по мере загрузки
+user_pref("content.notify.backoffcount", 3);	//максимальное число перерисовок, не считая финальной
+user_pref("content.interrupt.parsing", true);	//прерывать парсинг страницы для отзывчивости UI
+user_pref("content.max.tokenizing.time", 360000);	//максимальное время «замораживания» UI при парсинге, мс
+user_pref("content.switch.threshold", 300000);	//таймаут перехода в состояние «редких прерываний» парсинга; число миллисекунд бездействия мыши или клавиатуры для данного перехода
+user_pref("network.http.pipelining", true);	//включить конвейерные запросы (не ожидая каждого ответа)
+user_pref("network.http.pipelining.maxrequests", 8);	//максимум запросов в конвейере
+user_pref("network.http.proxy.pipelining", true);	//включить конвейерные запросы к прокси
+user_pref("network.http.pipelining.firstrequest", true);	//
+user_pref("network.dns.disableIPv6", true);	//отключить IPv6
+user_pref("nglayout.initialpaint.delay", 100);	//первичная задержка перед началом отрисовки 
+user_pref("network.http.max-connections", 60);	//максимум соединений с веб
+user_pref("network.http.max-connections-per-server", 8);	//максимум соединений с одним сервером
+user_pref("network.http.max-persistent-connections-per-proxy", 4);	//максимум единовременных соединений с прокси
+user_pref("network.http.max-persistent-connections-per-server", 2);	//максимум единовременных соединений с веб-сервером
+user_pref("network.http.keep-alive.timeout", 115);	//время жизни соединения
+user_pref("network.http.request.max-start-delay", 5);	//время в сек, после которого может быть превышено число одновременных соединений, определяемых через network.http.max-persistent-connections-per-proxy и-per-server
+user_pref("content.maxtextrun", 4095);	//длина единовременно обрабатываемого блока текста в знаках
+user_pref("network.ftp.idleConnectionTimeout", 150);	//время неактивности FTP-соединения в сек, для сброса
+
+//Оптимизация скорости и потребления памяти
+user_pref("plugin.expose_full_path", true);	//определять полный путь к np-плагинам
+user_pref("browser.sessionhistory.max_total_viewers", 1);	//кэшировать не более одной ранее посещенной страницы
+user_pref("config.trim_on_minimize", false);	//не сбрасывать RAM в файл подкачки при сворачивании КМ 
+user_pref("memory.free_dirty_pages", true);	//принудительная доп.очистка в случае нехватки памяти
+
+//Разное
+user_pref("security.warn_entering_weak", false);	//не предупреждать о слабой защищенности
+user_pref("security.warn_viewing_mixed", false);	//не предупреждать о просмотре смешанного содержимого
+user_pref("browser.xul.error_pages.expert_bad_cert", true);	//показать кнопку для ручного принятия «плохих» сертификатов
+user_pref("kmeleon.install_firefox_extension", true);	//установка расширений Firefox возможна
+user_pref("dom.max_script_run_time", 15);	//время работы скриптов без предупреждения о зависании	
+

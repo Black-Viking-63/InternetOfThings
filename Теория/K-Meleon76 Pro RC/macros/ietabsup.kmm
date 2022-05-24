@@ -1,0 +1,127 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# -------ietab supplement: additional features for ietab---------------
+
+$_tool_path=getfolder(RootFolder)."\\Tools";
+
+ie_extramenu{
+menuchecked=getpref(BOOL,"kmeleon.ietabextra.active");
+togglepref(BOOL,"kmeleon.ietabextra.active");
+$checkava=getpref(BOOL,"kmeleon.ietabextra.active");
+$disabled=("false");
+$checkava==$disabled?&extrasupoff:&extrasupon;
+}
+
+extrasupoff{
+exec($_tool_path."\\ietabsup\\ietabsup.exe ");
+statusbar("IEtab extra menus disabled");
+}
+
+extrasupon{
+exec($_tool_path."\\ietabsup\\ietabsup.exe extramenus");
+statusbar("IEtab extra menus enabled");
+}
+
+ie_scripting{
+menuchecked=getpref(BOOL,"kmeleon.iescripting.active");
+togglepref(BOOL,"kmeleon.iescripting.active");
+$checkava=getpref(BOOL,"kmeleon.iescripting.active");
+$disabled=("false");
+$checkava==$disabled?&scripton:&scriptoff;
+}
+
+scriptoff{
+exec($_tool_path."\\ietabsup\\ietabsup.exe disscript");
+statusbar("IEtab scripting disabled");
+}
+
+scripton{
+exec($_tool_path."\\ietabsup\\ietabsup.exe enscript");
+statusbar("IEtab scripting enabled");
+}
+
+ie_flash{
+menuchecked=getpref(BOOL,"kmeleon.ieflash.active");
+togglepref(BOOL,"kmeleon.ieflash.active");
+$checkava=getpref(BOOL,"kmeleon.ieflash.active");
+$disabled=("false");
+$checkava==$disabled?&flashon:&flashoff;
+}
+
+flashoff{
+exec($_tool_path."\\ietabsup\\tflash.exe off");
+statusbar("IEtab flash animation disabled");
+}
+
+flashon{
+exec($_tool_path."\\ietabsup\\tflash.exe on");
+statusbar("IEtab flash animation enabled");
+}
+
+clear_iehistory{
+exec($_tool_path."\\ietabsup\\clear_iehistory.cmd");
+statusbar("Clear Trident (IE) History");
+}
+
+clear_iecookies{
+exec($_tool_path."\\ietabsup\\clear_iecookies.cmd");
+statusbar("Clear Trident (IE) cookies");
+}
+
+clear_iecache{
+exec($_tool_path."\\ietabsup\\clear_iecache.cmd");
+statusbar("Clear Trident (IE) cache");
+}
+
+clear_ieforms{
+exec($_tool_path."\\ietabsup\\clear_ieforms.cmd");
+statusbar("Clear Trident (IE) web-forms");
+}
+
+clear_iepwd{
+exec($_tool_path."\\ietabsup\\clear_iepwd.cmd");
+statusbar("Clear Trident (IE) saved passwords");
+}
+
+clear_ieall{
+exec($_tool_path."\\ietabsup\\clear_ieall.cmd");
+statusbar("Clear All Trident (IE) user private data");
+}
+
+view_iecache{
+exec($_tool_path."\\ietabsup\\iecacheview\\iecacheview.exe");
+statusbar("View Trident (IE) cache");
+}
+
+ieoptionen{
+exec($_tool_path."\\ietabsup\\ieoptionen.cmd");
+}
+
+localz{
+exec($_tool_path."\\ietabsup\\localz.cmd");
+#exec ("CMD /c start \"\" /min ".$_tool_path."\\ietabsup\\localz.cmd");
+}
+
+ietabsups_BuildMenu{
+setmenu("&Pro",popup,"IETab Options", -1); 
+setmenu("IETab Options", macro, "Extra Menus", ie_extramenu);
+setmenu("IETab Options", separator,-1);
+setmenu("IETab Options", macro, "Block Jscript", ie_scripting);
+setmenu("IETab Options", macro, "Block Flash", ie_flash);
+setmenu("IETab Options", separator,-1);
+setmenu("IETab Options", macro, "View Cache", view_iecache);
+setmenu("IETab Options", separator,-1);
+setmenu("IETab Options", macro, "Clear IE History", clear_iehistory);
+setmenu("IETab Options", macro, "Clear IE Cookies", clear_iecookies);
+setmenu("IETab Options", macro, "Clear IE Cache", clear_iecache);
+setmenu("IETab Options", macro, "Clear IE Forms", clear_ieforms);
+setmenu("IETab Options", macro, "Clear IE Passwords", clear_iepwd);
+setmenu("IETab Options", macro, "Clear All IE Private Data", clear_ieall);
+setmenu("IETab Options", separator,-1);
+setmenu("IETab Options", macro, "IE Zones", localz);
+setmenu("IETab Options", macro, "IE Options", ieoptionen);
+}
+
+$OnInit=$OnInit."ietabsups_BuildMenu;";
+# --------------------------------------------------------------------
+$macroModules=$macroModules."ietab_sups;";

@@ -1,0 +1,27 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ----------Maximizing Fix for Windows 7 and higher---------------------------------------------------------
+#
+# This macro consequently switches fullscreen mode on/off to fix start position
+# of maximized K-Meleon 75 with hidden TitleBar. Without it KM window gets slightly shifted 
+# up-left
+# 
+# Preference: 	kmeleon.display.hideTitleBar
+#
+# Author:	rodocop
+# Version:	1.5.2 from 21/10/2016
+# ----------------------------------------------------------------------------------------------------------
+
+checktitle{
+$kmtitle=getpref(BOOL,"kmeleon.display.hideTitleBar");
+$kmtitle==true?&maxfix:0;
+}
+
+maxfix{
+plugin(fullscreen);
+plugin(fullscreen);
+}
+
+$OnOpenWindow=$OnOpenWindow."checktitle;";
+# ----------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."maxfix;";

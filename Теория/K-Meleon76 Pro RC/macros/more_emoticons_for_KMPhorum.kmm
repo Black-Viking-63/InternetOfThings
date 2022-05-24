@@ -1,0 +1,43 @@
+﻿# UTF-8 / K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+
+# ---------------------- more_emoticons_for_KMPhorum.kmm ----------------------
+# Version :		v1.1 2015-06-22 (CODE by JohnHell) 
+# Forum/Web :		http:
+# Menu :		none
+# Dependencies :	none
+# KM version : 		KM 1.1.x or newer
+# -----------------------------------------------------------------------------
+# Adds more emoticons to the posts editor of K-meleon forum (Phorum)
+# -----------------------------------------------------------------------------
+
+
+
+_more_emoticons_for_KMPHorum_go{ # execute if site match
+
+$_more_emoticons_for_KMPHorum_userpath = readfile(getfolder(ProfileFolder)."\\macros\\more_emoticons_for_KMPHorum\\more_emoticons_for_KMPHorum.js");
+$_more_emoticons_for_KMPHorum_globalpath = readfile(getfolder(RootFolder)."\\macros\\more_emoticons_for_KMPHorum\\more_emoticons_for_KMPHorum.js");
+
+$_more_emoticons_for_KMPHorum_tmp = "";
+
+	$_more_emoticons_for_KMPHorum_tmp = $_more_emoticons_for_KMPHorum_userpath != "" ? $_more_emoticons_for_KMPHorum_userpath : $_more_emoticons_for_KMPHorum_globalpath;
+
+	if($_more_emoticons_for_KMPHorum_tmp != ""){
+		injectJS($_more_emoticons_for_KMPHorum_tmp);
+	}
+}
+
+
+
+_more_emoticons_for_KMPHorum_check{ # check site match
+
+
+$_more_emoticons_for_KMPHorum_kmeleonposting1 = "http://kmeleon.sourceforge.net/forum/posting.php";
+$_more_emoticons_for_KMPHorum_kmeleonposting2 = "http://kmeleonbrowser.org/forum/posting.php";
+
+	if(($_more_emoticons_for_KMPHorum_kmeleonposting1 != -1) or ($_more_emoticons_for_KMPHorum_kmeleonposting2 != -1)){
+		&_more_emoticons_for_KMPHorum_go;
+	}
+}
+
+
+$OnLoad = $OnLoad."_more_emoticons_for_KMPHorum_check;";

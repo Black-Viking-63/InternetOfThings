@@ -1,0 +1,481 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- Search+ v1.0.6 --jsnj (with fixes for KM75 by siria & rodocop) ------------------------------------
+# ---------- 22/08/2015 (siria fixed 'live menus' and rodocop replaced Scroogle engine [discontinued] with IxQuick)
+# Search+ adds the following features among others: 
+# Search History, Site Search, Keywords, Highlight Search, Move Engine Up/Down
+#
+#	Dependencies	:	main.kmm ($macroPrefBranch, $kLayers(for KMv1.1), OpenURL)
+#	Preferences	:	kmeleon.plugins.macros.search.*
+# ------------------------------------------------------------------------------------------------------------------
+
+# Consult default engine (default engine is also used when macros are disabled)
+Search{
+$_Search_EngineURL==""?$_Search_EngineURL=getpref(STRING,$_Search_pref_DefaultURL):0;
+$_Search_EngineName==""?$_Search_EngineName=getpref(STRING,$_Search_pref_DefaultName):0;
+$_Search_EngineName==_("Site Search") ? &_SiteSearch:0; 
+$OPS==0 ? $_Search_Query=$SelectedText:0; 
+$_Search_Query ? ($_Search_EngineName==_("Multisearch") ? &_Search_Metasearch_Selected:&_Search_Selected):&_Search_Typed; 
+$_Search_Query ? (getpref(BOOL, $_Search_pref_Prev."OFF") ? 0:&_SetPreviousSearch):0;
+$_Search_Query ? setpref(STRING,$_Search_pref_Query,$_Search_Query):"";
+$_Search_EngineName=""; $_Search_EngineURL=""; $_SearchKey=""; 
+$_Search_Query ? (getpref(BOOL,$_Search_pref_HL) ? 0:$OnLoadOnce=$OnLoad."_HighlightSearch;"):0;
+}
+
+Search_PasteAndSearch{
+$URLBAR=getclipboard(); &Search;
+}
+
+# Lock/unlock current engine
+Search_ToggleEngineLock{
+menuchecked=getpref(BOOL,$_Search_pref_Locked);
+togglepref(BOOL,$_Search_pref_Locked);
+statusbar(sub("%s",getpref(BOOL,$_Search_pref_Locked)?getpref(STRING,$_Search_pref_DefaultName):_("Last chosen engine"),_("Default search engine: %s")));
+}
+
+# Consult multiple engines (Metasearch)
+Search_Metasearch{
+menuchecked=(getpref(STRING,$_Search_pref_DefaultName)==_("Multisearch"));
+$_Search_EngineName=_("Multisearch"); $_Search_EngineURL=_("Multisearch");
+$_macro="Search"; &_Search_Init;
+}
+
+# Search the current site (Site Search)
+Search_SiteSearch{
+menuchecked=(getpref(STRING,$_Search_pref_DefaultURL)==_("Site Search"));
+$_Search_EngineName=_("Site Search"); $_Search_EngineURL=_("Site Search");
+$_macro="Search"; &_Search_Init;
+}
+
+# Consult a particular engine
+Search_KMForums{
+$_Search_EngineURL=getpref(STRING,$macroPrefBranch."search.kmforums");
+$_Search_EngineName=_("K-Meleon Forums Search"); &Search;
+}
+Search_Engine{
+menuchecked=(getpref(STRING,$_Search_pref_Engine.$ARG.".url")==getpref(STRING,$_Search_pref_DefaultURL));
+$_n=$ARG; $macro="_Search_Init"; &_Search; 
+}
+
+# ----- PRIVATE
+
+# Normal websearch
+
+$_Search_EngineURL=""; $_Search_EngineName="";
+$_Search_pref_DefaultName="kmeleon.general.searchEngineName";
+$_Search_pref_DefaultURL="kmeleon.general.searchEngine";
+$_Search_pref_Engine=$macroPrefBranch."search.engine";
+$_Search_pref_Locked=$macroPrefBranch."search.locked";
+$_Search_pref_Accel=$macroPrefBranch."search.accelerator";
+$_Search_pref_Query=$macroPrefBranch."search.query";
+$_Search_pref_PrevQuery=$macroPrefBranch."search.previousQueryOFF";
+$_Search_pref_HL = $macroPrefBranch."search.highlightOFF";
+$_JS="javascript.enabled"; $OPS=0;
+
+_Search{
+$_Search_EngineURL=getpref(STRING,$_Search_pref_Engine.$_n.".url");
+$_Search_EngineName=getpref(STRING,$_Search_pref_Engine.$_n.".name");
+$_macro="Search"; macros($macro);
+}
+_Search_Init{
+$__locked=getpref(BOOL,$_Search_pref_Locked);
+$__locked?0:($_Search_EngineURL?setpref(STRING,$_Search_pref_DefaultURL,$_Search_EngineURL):0);
+$__locked?0:($_Search_EngineName?setpref(STRING,$_Search_pref_DefaultName,$_Search_EngineName):0);
+&_SearchPlusDisplay; macros($_macro);
+}
+_Search_Selected{
+$OpenURL=$_Search_EngineURL.urlencode($_Search_Query); &OpenURL_Selected;
+}
+_Search_Typed{
+$_Search_Query=$URLBAR; &_Bug1126Fix; 
+$_Search_Query ?"": $_Search_Query=$URL; &_CheckSearchQuery;
+$_Search_Query==$URL?$_Search_Query=prompt(_("Enter search query:"),sub("%s",$_Search_EngineName,_("Search (%s)")),$_Query):&_SearchKeyword; 
+$_Search_Query ? &_Bug1126Fix:""; $_pref=$_OpenURL_Typed; 
+$_Search_EngineName==_("Multisearch")? ($_Search_Query ? &_Search_Metasearch_Open:""):&_Search_OpenTyped;
+}
+_Search_OpenTyped{
+$OpenURL=$_Search_Query ? $_Search_EngineURL.urlencode($_Search_Query):"";
+# prevent search queries from being added to the MRU
+$__pref="kmeleon.MRU.behavior"; $__data=getpref(INT,$__pref); $__data==2?setpref(INT,$__pref,3):0; 
+&OpenURL_Typed; setpref(INT,$__pref,$__data);
+}
+_Bug1126Fix{
+$_blank=-1; $_blank=index($_Search_Query," "); $_blank==-1?$_blank=index($_Search_Query,"	"):0;
+while($_blank==0) &_Bug1126;
+}
+_Bug1126{
+$_Search_Query=substr($_Search_Query,1); $_blank=index($_Search_Query," ");
+$_blank==-1?$_blank=index($_Search_Query,"	"):0;
+}
+_CheckSearchQuery{
+$_SearchQuery=getpref(BOOL, $_Search_pref_PrevQuery);
+$_SearchQuery ? $_Query="":$_Query=getpref(STRING,$_Search_pref_Query);
+}
+_SearchQueryDelete{
+&_CheckSearchQuery; $_SearchQuery ? 0:delpref($_Search_pref_PrevQuery); 
+}
+_ToggleSearchQuery{
+menuchecked=(getpref(BOOL,$_Search_pref_PrevQuery)!=true);
+togglepref(BOOL,$_Search_pref_PrevQuery); 
+}
+
+_HighlightSearch{
+getpref(BOOL,$_JS) ? &_JSHighlight:&_JS;
+}
+_JS{
+togglepref(BOOL,$_JS); &_JSHighlight; togglepref(BOOL,$_JS);
+}
+_JSHighlight{
+$_Search_Query=gsub("%","%25",$_Search_Query); 
+$_Search_Query=gsub("\"","\\\"",$_Search_Query); 
+$_Search_Query=gsub("'","\\'",$_Search_Query);
+open("javascript:(function(){var count=0, text, dv;text=%22".$_Search_Query."%22;if(text==null || text.length==0)return;dv=document.defaultView;function searchWithinNode(node, te, len){var pos, skip, spannode, middlebit, endbit, middleclone;skip=0;if( node.nodeType==3 ){pos=node.data.toUpperCase().indexOf(te);if(pos>=0){spannode=document.createElement(%22SPAN%22);spannode.style.backgroundColor=%22yellow%22;middlebit=node.splitText(pos);endbit=middlebit.splitText(len);middleclone=middlebit.cloneNode(true);spannode.appendChild(middleclone);middlebit.parentNode.replaceChild(spannode,middlebit);++count;skip=1;}}else if( node.nodeType==1&& node.childNodes&& dv.getComputedStyle(node, null).getPropertyValue(%22display%22)!=%22none%22){for (var child=0; child < node.childNodes.length; ++child){child=child+searchWithinNode(node.childNodes[child], te, len);}}return skip;}window.status=%22Searching for '%22+text+%22'...%22;searchWithinNode(document.body, text.toUpperCase(), text.length);window.status=%22Found %22+count+%22 occurrence%22+(count==1?%22%22:%22s%22)+%22 of '%22+text+%22'.%22;})();");
+}
+_ToggleHighlightSearch{
+menuchecked=(getpref(BOOL,$_Search_pref_HL)!=true);
+togglepref(BOOL,$_Search_pref_HL); 
+}
+
+
+# Metasearch
+
+$_Search_pref_Meta=$macroPrefBranch."search.meta";
+
+_Search_Metasearch_Selected{
+$_pref=$_OpenURL_Selected; &_Search_Metasearch_Open;
+}
+_Search_Metasearch_Open{
+$_how=getpref(STRING,$_pref); 
+$_how=="ID_OPEN_LINK_IN_BACKGROUND"?$_how=1:0; 
+$_how=="ID_OPEN_LINK_IN_BACKGROUNDTAB"?$_how=1:0; 
+$_how=="layers(OpenURLBg)"?$_how=1:0; 
+$_how=="layers(OpenURL)"?$_how=0:0; 
+$_how=="ID_OPEN_LINK"?$_how=0:0; 
+$_how=="ID_OPEN_LINK_IN_NEW_WINDOW"?$_how=0:0;
+$_how=="ID_OPEN_LINK_IN_NEW_TAB"?$_how=0:0; 
+$URLBAR=$URL; $_i=0; while($_i>-1) &_Search_Metasearch_OpenLoop;
+}
+_Search_Metasearch_OpenLoop{
+$__data=getpref(STRING,$_Search_pref_Meta.$_i.".url"); 
+$OpenURL=$__data.urlencode($_Search_Query);
+$__data==""?0:$_how==0?&OpenURL_InNew:0;
+$__data==""?0:$_how==1?&OpenURL_InBg:0;
+$_i=$__data==""?-1:$_i+1;
+}
+
+
+# Site Search
+
+$_Search_pref_Site=$macroPrefBranch."search.site"; 
+
+$_bing= "http://www.bing.com/search?q=site:";
+$_Google= "https://www.google.com/search?q=site:";  
+# next line is the alternative JS-code (bookmarklet) for Google Site Search
+# javascript:q=""+(window.getSelection?window.getSelection():document.getSelection?document.getSelection():document.selection.createRange().text);if(!q)q=prompt("Search%20terms%20[leave%20selection%20and%20box%20blank%20to%20list%20all%20pages]%20...").replace(/\s\+/g,"%252B");if(q!=null)location="http://www.google.com/search?q="+q.replace(/\s+/g,"+")+"+site:"+location.hostname;void(0);
+# $_Scroogle= "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=site:" ; #Scroogle is discontinued now. Replaced by IxQuick private search
+$_IxQuick= "https://ixquick.com/do/search?q=host:"; 
+$_Yahoo= "http://search.yahoo.com/search?fr=slv5-&ei=UTF-8&vs=";
+
+_SiteSearch{
+$_host=hostname($URL);  $_Search_EngineName=$_host; &_GetSiteEngine; 
+$_SiteSearchEngine=="bing" ? $_Search_EngineURL= $_bing.$_host ."+":0;
+$_SiteSearchEngine=="Google" ? $_Search_EngineURL= $_Google.$_host ."+":0;
+$_SiteSearchEngine=="IxQuick" ? $_Search_EngineURL= $_IxQuick.$_host ."+":0;
+$_SiteSearchEngine=="Yahoo!" ? $_Search_EngineURL= $_Yahoo.$_host ."&p=":0;
+}
+_GetSiteEngine{
+$_SiteSearchEngine=getpref(STRING,$_Search_pref_Site.".engine");
+$_SiteSearchEngine ? 0:$_SiteSearchEngine="Google";
+} 
+_SetSiteEngine{
+setpref(STRING,$_Search_pref_Site.".engine",$_SiteSearchEngine); &_SiteSearchMenu;
+}
+_BingSiteSearch{
+menuchecked=(getpref(STRING,$_Search_pref_Site.".engine")==bing);
+$_SiteSearchEngine=bing; &_SetSiteEngine;
+}
+_GoogleSiteSearch{
+menuchecked=(getpref(STRING,$_Search_pref_Site.".engine")=="");
+$_SiteSearchEngine=""; &_SetSiteEngine;
+}
+_IxQuickSiteSearch{
+menuchecked=(getpref(STRING,$_Search_pref_Site.".engine")=="IxQuick");
+$_SiteSearchEngine="IxQuick"; &_SetSiteEngine;
+}
+_YahooSiteSearch{
+menuchecked=(getpref(STRING,$_Search_pref_Site.".engine")=="Yahoo!");
+$_SiteSearchEngine="Yahoo!"; &_SetSiteEngine;
+}
+
+
+# Keyword Search
+
+$_SearchKey=""; $_Key=""; 
+$_Search_pref_Key = $macroPrefBranch."search.keyword.";
+
+_SearchKeyword{
+$_Space = index($_Search_Query, " "); $_Space==-1 ? 0:&_FindSearchKey;
+}
+_FindSearchKey{
+$_Key = substr($_Search_Query, 0, $_Space); 
+$_n=0; $_mac="_GetSearchKey"; &_GetMetaKey;
+}
+_GetMetaKey{
+$_SearchKey=getpref(STRING,$_Search_pref_Key._("Multisearch")); $mc=""; 
+$_SearchKey==$_Key ? $_Search_EngineName=_("Multisearch"):""; 
+$_SearchKey==$_Key ? $_Search_EngineURL=_("Multisearch"):"";
+$macr=""; $_SearchKey==$_Key ? &_GetQuery_Search:&_GetSiteKey;
+}
+_GetSiteKey{
+$_SearchKey=getpref(STRING,$_Search_pref_Key._("Site Search")); $mc=""; 
+$_SearchKey==$_Key ? $_Search_EngineName=_("Site Search"):0; 
+$_SearchKey==$_Key ? $_Search_EngineURL=_("Site Search"):0; 
+$macr="_SiteSearch"; $_SearchKey==$_Key ? &_GetQuery_Search:&_GetSearchInfo;
+} 
+_GetSearchKey{
+$_SearchKey=getpref(STRING,$_Search_pref_Key.$__name); $mc=_Search;
+$macr=""; $_SearchKey==$_Key ? &_GetQuery_Search:&_GetSearchNumber;
+}
+_GetQuery_Search{
+$_Search_Query = substr($_Search_Query, $_Space+1); $macro=""; macros($mc);
+$_macro=$macr; &_Search_Init;
+}
+_ConfigureKeyword{
+&_GetSearchDefault; 
+$_SearchKey=getpref(STRING,$_Search_pref_Key.$_SearchName);
+$_SearchKey=prompt(_("Enter Keyword for ").$_SearchName.":",$_SearchName._(" Keyword"),$_SearchKey);
+$_SearchKey ? (index($_SearchKey," ")==-1 ? 0:$_SearchKey=gsub(" ","",$_SearchKey)):"";
+$_SearchKey ? setpref(STRING,$_Search_pref_Key.$_SearchName,$_SearchKey):"";
+}
+
+_GetSearchInfo{
+$__name=getpref(STRING,$_Search_pref_Engine.$_n.".name"); 
+$__url=getpref(STRING,$_Search_pref_Engine.$_n.".url"); 
+$__name ? macros($_mac):"";
+}
+_GetSearchNumber{
+$_n=$_n+1; &_GetSearchInfo;
+}
+_GetSearchDefault{
+$_SearchName = getpref(STRING,$_Search_pref_DefaultName) ;
+$_SearchURL = getpref(STRING,$_Search_pref_DefaultURL) ;
+}
+
+
+# Move Search Engine
+
+_SearchEngineMove{
+menugrayed=(index($_SearchURL,":")==-1);
+&_GetSearchDefault; index($_SearchURL,":")==-1 ? 0:&_GetDefaultNumber;
+}
+_GetDefaultNumber{
+$_mac=""; $_n=0; &_GetSearchInfo; 
+while($_SearchName!=$__name) &_GetSearchNumber; &_SearchUpDown;
+}
+_SearchUpDown{
+$_j=0; &_GetName; while($_name) &_GetSearchCount; 
+$_cnt=$_j-1; $_j=$_cnt; $__list=""; while($_j>-1) &_SearchList; 
+$_Button=confirm("\t"._("Move  '").$_SearchName._("'  Up?")."\n\n\n".$__list."\n\n\t"._("Yes = Move Up")."\t"._("No = Move Down")."\t\t",_("Move ").$_SearchName,YESNOCANCEL,QUESTION);
+$_SN1=$__name; $_SU1=$__url; 
+$_Button==YES ? &_SearchUp:($_Button==NO ? &_SearchDown:"");
+$_Button ? &_SearchEngineMove:"";
+}
+_GetName{
+$_name=getpref(STRING,$_Search_pref_Engine.$_j.".name"); 
+}
+_GetSearchCount{
+$_j=$_j+1; &_GetName; 
+}
+_SearchList{
+&_GetName; $_SearchName==$_name ? $_name="-->"."\t".$_name:$_name="\t".$_name;
+$__list=$_name."\n".$__list; $_j=$_j-1;
+}
+_SearchUp{
+$_n=$_n-1; $_mac="_MoveSearch"; $_num=$_n+1; &_GetSearchInfo;
+}
+_SearchDown{
+$_n=$_n+1; $_mac="_MoveSearch"; $_num=$_n-1; &_GetSearchInfo;
+}
+_MoveSearch{
+$_SN2=$__name; $_SU2=$__url; 
+$_SN=$_SN1; $_SU=$_SU1; &_SwitchSearch; $_n=$_num;
+$_SN=$_SN2; $_SU=$_SU2; &_SwitchSearch; 
+$_j=0; while($_j>-1) &_Search_BuildMenuLoop; 
+}
+_SwitchSearch{
+setpref(STRING,$_Search_pref_Engine.$_n.".name",$_SN);
+setpref(STRING,$_Search_pref_Engine.$_n.".url",$_SU);
+}
+
+
+# Previous Searches
+
+$_Search_pref_Prev=$macroPrefBranch."search.previous";
+
+_SetPreviousSearch{
+&_GetPrevCount; $_n=$_p+1; setpref(INT,$_Search_pref_Prev.".count",$_n);
+setpref(STRING,$_Search_pref_Prev.$_n.".name",$_Search_EngineName);
+setpref(STRING,$_Search_pref_Prev.$_n.".query",$_Search_Query);
+setpref(STRING,$_Search_pref_Prev.$_n.".url",$_Search_EngineURL);
+$_loc=0; &_GetPrevCount; while($_p>0) &_Search_BuildPrevMenu;
+}
+_GetPrevCount{
+$_p=getpref(INT,$_Search_pref_Prev.".count");
+}
+_GetPrevMax{
+$_max=getpref(INT, $_Search_pref_Prev.".max");
+}
+_PreviousMax{
+&_GetPrevMax;
+$_max=prompt(_("Enter maximum number of previous searches to save."),_("Previous Search Maximum"),$_max);
+$_max==""?"":setpref(INT, $_Search_pref_Prev.".max",$_max); 
+}
+_OpenPreviousSearch{
+$_n=$ARG; $_s=""; $OPS=1;
+$_Search_EngineName=getpref(STRING,$_Search_pref_Prev.$_n.".name");
+$_Search_EngineURL=getpref(STRING,$_Search_pref_Prev.$_n.".url");
+$_Search_Query=getpref(STRING,$_Search_pref_Prev.$_n.".query");
+$_SiteEngine=$_bing; &_SiteCheck; $_Site==-1?0:$_s=1; 
+$_SiteEngine=$_Google; &_SiteCheck; $_Site==-1?0:$_s=1;
+$_SiteEngine=$_IxQuick; &_SiteCheck; $_Site==-1?0:$_s=1;
+$_SiteEngine=$_Yahoo; &_SiteCheck; $_Site==-1?0:$_s=1;
+$URLBAR=$_Search_Query; $_macro="Search"; &_Search_Init;
+$_s ? $_Search_EngineName=_("Site Search"):0; $_s ? $_Search_EngineURL=_("Site Search"):0;
+$_macro=""; $_s ? &_Search_Init:0; $_s ? $_Search_EngineName="":0; 
+$_s ? $_Search_EngineURL="":0; $OPS=0;
+}
+_SiteCheck{
+$_Site=index($_Search_EngineURL,$_SiteEngine);
+}
+_ClearPrevSearches{
+menugrayed=(getpref(INT,$_Search_pref_Prev.".count")==0);
+confirm(_("Delete All Previous Searches?")."\t\t", _("Clear Previous Searches"),"",QUESTION) ? &_DeleteSearches:"";
+}
+_DeleteSearches{
+statusbar(_("Deleting Previous Searches..."));  
+&_GetPrevCount; while($_p>0) &_DelPrevSearch; 
+&_GetPrevCount; while($_p>0) &_Search_BuildPrevMenu;
+setpref(INT,$_Search_pref_Prev.".count",0);
+statusbar(_("Previous Searches Deleted")); alert(_("Previous Searches Deleted")."\t","",INFO);  
+}
+_DelPrevSearch{
+delpref($_Search_pref_Prev.$_p.".url"); delpref($_Search_pref_Prev.$_p.".query"); 
+delpref($_Search_pref_Prev.$_p.".name"); $_p=$_p-1;
+}
+_DelPrevOnQuit{
+&_GetPrevCount; &_GetPrevMax; $_q=$_p-$_max; $_p=$_q;
+$_max > 0 ? &_DelPrevQuit:"";
+}
+_DelPrevQuit{
+while($_p>0) &_DelPrevSearch;
+}
+
+_SearchPlusDisplay{
+setmenu(_("Search &Options"),macro,"",Search_ToggleEngineLock,0);
+setmenu(_("Search &Options"),macro,"",_ConfigureKeyword,1);
+setmenu(_("Search &Options"),macro,"",_SearchEngineMove,2);
+index($macroModules,";Search+Icon;")>-1? setmenu(_("Search &Options"),macro,"",_ChangeSearchIcon,3) :0; 
+&_GetSearchDefault; 
+setmenu(_("Search &Options"),macro,_("Keep  '").$_SearchName._("'  As &Default Engine"),Search_ToggleEngineLock,0);
+setmenu(_("Search &Options"),macro,_("Configure  '").$_SearchName._("'  Keyword..."),"_ConfigureKeyword",1);
+setmenu(_("Search &Options"),macro,_("Move  '").$_SearchName._("'  Up/Down..."),"_SearchEngineMove",2);
+index($macroModules,";Search+Icon;")>-1? setmenu(_("Search &Options"),macro,_("&Change  '").$_SearchName._("'  Icon..."),"_ChangeSearchIcon",3):0;
+index($macroModules,";Search+Icon;")>-1? &_SearchIconDisplay:0;
+}
+
+
+# Accels/Menus
+
+_Search_BuildMenu{
+# help menu
+setmenu(KMForums,macro,"K-Meleon Forums &Search...",Search_KMForums);
+# tools menu
+setmenu("WebServices",popup,"&Web Search",ID_NAV_SEARCH);
+setmenu("WebServices",command,"",ID_NAV_SEARCH);
+&_GetPrevMax; $_max==0 ? setpref(INT, $_Search_pref_Prev.".max",50):0;
+$_SubM=" "; &_SearchPreviousMenu;
+setmenu("&Web Search",inline,_("&Search With"));
+setmenu(_("&Search With"),inline,_Search_Engines);
+setmenu(_Search_Engines,inline,_Search_Engines_Configurable);
+$_j=0; while($_j>-1) &_Search_BuildMenuLoop; 
+setmenu(_Search_Engines,inline,_Search_Engines_Metasearch); &_SiteSearchMenu;
+getpref(STRING,$_Search_pref_Meta."0.url")==""?0:setmenu(_Search_Engines_Metasearch,macro,_("&Multisearch"),Search_Metasearch);
+setmenu("&Web Search",separator,_("Search &Options"));
+setmenu("&Web Search",popup,_("Search &Options"),-1);
+setmenu(_("Search &Options"),inline,_Search_Toggle);
+setmenu(_Search_Toggle,macro,_("&Highlight Search Query"),_ToggleHighlightSearch);
+setmenu(_Search_Toggle,macro,_("&Show Previous Search Query"),"_ToggleSearchQuery");
+setmenu(_Search_Toggle,macro,_("&Use ALT+ENTER to Search"),"ToggleSearchAccel");
+setmenu(_("Search &Options"),inline,_Previous_Search);
+setmenu(_Previous_Search,macro,_("Enable &Previous Searches"),"_TogglePreviousSearch");
+setmenu(_Previous_Search,macro,_("Maximum Previous Searches..."),"_PreviousMax");
+setmenu(_Previous_Search,macro,_("Clear Previous Searches..."),"_ClearPrevSearches");
+setmenu(_("Search &Options"),separator,_("Configure Site Search"));
+setmenu(_("Search &Options"),popup,_("Configure Site Search"));
+setmenu(_("Configure Site Search"),macro,_("Enable Site Search"),_ToggleSiteSearch);
+setmenu(_("Configure Site Search"),separator,_("Use ")."bing");
+setmenu(_("Configure Site Search"),macro,_("Use ")."bing",_BingSiteSearch);
+setmenu(_("Configure Site Search"),macro,_("Use ")."Google",_GoogleSiteSearch);
+setmenu(_("Configure Site Search"),macro,_("Use ")."IxQuick",_IxQuickSiteSearch);
+setmenu(_("Configure Site Search"),macro,_("Use ")."Yahoo!",_YahooSiteSearch);
+setmenu(_("Search &Options"),macro,_("Con&figure Search Engines..."),"kmPrefs(webfind)",-1);
+# context menu
+setmenu(Selection,popup,_("&Search With"));
+# go button
+setmenu(_Go_Clipboard,macro,_("Paste And &Search"),Search_PasteAndSearch);
+}
+_SearchPreviousMenu{
+getpref(BOOL, $_Search_pref_Prev.".OFF") ? setmenu("&Web Search",inline,$_SubM,0):setmenu("&Web Search",popup,_("&Previous Searches"),0);
+setmenu(_("&Previous Searches"),inline,_PreviousSearchList); 
+$_loc=""; &_GetPrevCount; while($_p>0) &_Search_BuildPrevMenu;
+setmenu(_("&Previous Searches"),inline,"ClearPrevious");
+setmenu(ClearPrevious,macro,_("Clear Previous Searches..."),"_ClearPrevSearches");
+}
+_TogglePreviousSearch{
+menuchecked=(getpref(BOOL, $_Search_pref_Prev.".OFF")!=true);
+setmenu(ClearPrevious,macro,"","_ClearPrevSearches"); 
+togglepref(BOOL,$_Search_pref_Prev.".OFF"); $_SubM=""; &_SearchPreviousMenu; 
+}
+_SiteSearchMenu{
+setmenu(_("Site Search"),macro,"",Search_SiteSearch,0); 
+&_GetSiteEngine; setmenu(_Search_Engines,inline,_("Site Search"),-1);
+getpref(BOOL, $_Search_pref_Site.".OFF") ? setmenu(_("Site Search"),macro,_("Site Search")." (".$_SiteSearchEngine.")","",0):setmenu(_("Site Search"),macro,_("Site Search")." (".$_SiteSearchEngine.")",Search_SiteSearch,0);
+}
+_ToggleSiteSearch{
+menuchecked=(getpref(BOOL, $_Search_pref_Site.".OFF")!=true);
+togglepref(BOOL,$_Search_pref_Site.".OFF"); &_SiteSearchMenu; 
+}
+_Search_BuildPrevMenu{
+setmenu("_PreviousSearchList",macro,"","_OpenPreviousSearch(".$_p.")",$_loc); 
+$_PS=getpref(STRING,$_Search_pref_Prev.$_p.".name");
+$_PQ=getpref(STRING,$_Search_pref_Prev.$_p.".query"); 
+$_PS ? $_PS=$_PQ."  -->  ".$_PS:""; 
+setmenu("_PreviousSearchList",macro,$_PS,"_OpenPreviousSearch(".$_p.")",$_loc);
+$_p=$_p-1;
+}
+_Search_BuildMenuLoop{
+$__data=getpref(STRING,$_Search_pref_Engine.$_j.".name");
+$__data==""?0:setmenu(_Search_Engines_Configurable,macro,$__data,"Search_Engine(".$_j.")");
+$_j=$__data==""?-1:$_j+1;
+}
+_Search_SetAccels{
+setaccel("CTRL SHIFT V","macros(Search_PasteAndSearch)");
+setaccel("ALT K","macros(_ConfigureKeyword)");
+setaccel("ALT VK_UP","macros(_SearchEngineMove)");
+getpref(STRING,$_Search_pref_Accel)=="" ? setpref(STRING,$_Search_pref_Accel, "CTRL G"):0;
+&SetSearchAccel;
+}
+SetSearchAccel{
+$_SearchAccel=getpref(STRING,$_Search_pref_Accel); setaccel($_SearchAccel,"macros(Search)");
+$_SearchAccel=="ALT VK_RETURN"? setaccel("CTRL G",""):setaccel("ALT VK_RETURN","");
+}
+ToggleSearchAccel{
+menuchecked=(getpref(STRING,$_Search_pref_Accel)=="ALT VK_RETURN");
+togglepref(STRING,$_Search_pref_Accel, "CTRL G","ALT VK_RETURN"); &SetSearchAccel;
+}
+
+$OnInit=$OnInit."_Search_BuildMenu;_Search_SetAccels;";
+$OnStartup=$OnStartup."_SearchPlusDisplay;_SearchQueryDelete;";
+$OnQuit=$OnQuit."_DelPrevOnQuit;";
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."Search;";

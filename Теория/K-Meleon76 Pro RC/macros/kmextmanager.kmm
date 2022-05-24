@@ -1,0 +1,50 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# --------extensions uninstaller-experimental-------------------------
+
+$_keu_path=getfolder(RootFolder);
+$_profile_path=getfolder(ProfileFolder);
+$_keith_path=getfolder(RootFolder)."\\Tools\\keith";
+
+
+keith{
+menugrayed=(substr($LinkURL,0,14)!="http://kmext.s");
+exec($_keith_path."\\keith.exe " . $LinkURL);
+}
+
+kmextman{
+$getlocale=getpref(STRING,"general.useragent.locale");
+exec($_keu_path."\\kmextman.exe \"".$_profile_path."\" " . $getlocale);
+}
+
+
+kmextsearcher{
+$kmext = prompt("Enter search query:", "Search for Extensions", "extension name or function");
+$kmext == "" ? "" : opentab("http://www.google.com/search?hl=en&q=site:http://kmext.sourceforge.net/%20" .$kmext);
+}
+
+kmexthome{
+opentab("http://kmext.sourceforge.net");
+}
+
+kmextman_BuildMenu{
+setmenu("&Tools",inline,keu_pag,5);
+setmenu(keu_pag,macro,"Extensions Manager",kmextman,2);
+setmenu(LinkSave,inline,keith_pagina);
+setmenu(keith_pagina,macro,"KM Extension",keith,1);
+setmenu("&Help",macro,"Extensions Centre",kmexthome,2);
+setmenu("&Help",macro,"Search Extensions",kmextsearcher,3);
+}
+
+
+extman_BuildToolbar{
+$extman_Tooltip=_("Extensions Manager");
+pluginmsg(toolbars,"AddToolbar","Extensions Manager,16,16","");
+$extman=(pluginmsg(toolbars,"AddButton","Extensions Manager,kmextman,macros("."kmextman"."),"." . ".",".$extman_Tooltip.",16,16,"."extman.bmp[1],extman.bmp[0]",""));
+}
+
+
+
+$OnInit=$OnInit."kmextman_BuildMenu;";
+$OnSetup=$OnSetup."extman_BuildToolbar;";
+$macroModules=$macroModules."keu;";

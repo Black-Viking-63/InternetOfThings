@@ -1,0 +1,33 @@
+#--------------AdBlockPlus7------by_siria-----edited_by_rodocop---------------
+#-----6951_bytes--------------------------------------------------------------
+
+
+Toggle AdBlock Plus On/Off=Вкл./Выкл. AdBlock Plus
+Open filters list=Открыть список фильтров
+Open live blocking GUI=Управление блокировкой элементов страницы
+Toggle blocking-buttons on framed rich-media=Выключатель ярлыков для блокировки Flash- и Java- объектов в собственных фреймах
+Toggle placeholders display on blocked objects=Выключатель заглушек на месте блокированных объектов
+Toggle counting hits of every filter=Выключатель сбора статистики фильтрации
+Block current image=Блокировка данного изображения
+
+Open the page for this extension/macro in the K-Meleon forum=Открыть тему о расширении АВР на форуме КМ
+
+Toggle AdBlock Plus On/Off. Right-click for more options=Вкл./Выкл. AdBlock Plus. Другие опции - по правому клику мыши
+
+Show ABP button permanently pressed when active=Кнопка АВР, если он активен, будет отображаться нажатой
+
+AdBlock Plus On/Off=AdBlock Plus включен
+Filter preferences=Настройки фильтров и подписок
+Live Block items on this page=Блокировать элементы страницы
+Show tabs on Flash and Java=Показывать ярлыки на Flash- и Java-объектах
+Show placeholders for blocked elements=Показывать заглушки вместо заблокированных
+Count filter hits=Вести статистику фильтров
+Keep button pressed=Показывать кнопку работающего АВР нажатой
+KM-Forum for this addon=Тема данного расширения на официальном форуме
+Adblock Image=Блокировать изображение
+
+AdBlock Plus with default light subscription successfully installed for this profile!=AdBlock с легкой подпиской успешно установлен в этот профиль!
+Subscription installed=Подписка подключена
+AdBlock Plus subscriptions seems not to install! Check the folder 'adblockplus' in your profile! If absent - place it there manually from the addon package=Похоже, подписку подключить не удалось. Проверьте наличие папки 'adblockplus' в вашем профиле, и если ее нет - извлеките ее в папку профиля вручную из архива с расширением
+Attention!=Внимание!
+

@@ -1,0 +1,47 @@
+﻿# LANGUAGE DEFINITION FILE for Search+ v1.0.5 (ru) by rodocop
+
+#------------*Advanced*---search.kmm---(search+ by jsnj-siria)------------------------------------------------------------
+Search &Options=&Опции поиска
+Configure Site Search=Настроить поиск по сайту
+Con&figure Search Engines...=Настроить поисковики
+&Previous Searches=&История поиска
+Clear Previous Searches...=Очистить историю поиска...
+Keep  '=Оставить '
+Search by =Искать в 
+&Search With=Искать с помо&щью
+'  As &Default Engine=' как поисковик по умолчанию
+Configure  '=Настроить команду вызова для '
+'  Keyword...=' ...
+Enter Keyword for =Ввод команды вызова для 
+Move  '=Переместить ' 
+'  Up/Down...=' вверх/вниз...
+Deleting Previous Searches...=Удаляем историю поиска...
+Delete All Previous Searches?=Удалить всю историю поиска?
+Previous Search Maximum=Максимум запросов в истории
+Enter maximum number of previous searches to save.=Введите максимальное число запросов, сохраняемых в истории поиска
+Last chosen engine=Последний выбранный поисковик
+Default search engine: %s=Поисковик по умолчанию: %s
+Clear Previous Searches=Очистить историю поиска
+Previous Searches Deleted=История поиска очищена
+&Highlight Search Query=&Подсветить поисковый запрос
+&Show Previous Search Query=Показать предыдущий поисковый &запрос
+&Use ALT+ENTER to Search=Использовать ALT+ENTER &для поиска
+Enable &Previous Searches=&Включить историю поиска
+Maximum Previous Searches...=Максимальное число запросов в истории поиска
+Enable Site Search=Включить поиск по сайту
+Site Search=Поиск по сайту
+&Change  '=Сменить иконку  '
+'  Icon...=' 
+"Use "="Использовать "
+"'  Up?"="'  в списке?"
+"Yes = Move Up"="Да = Вверх"
+"No = Move Down"="Нет = Вниз"
+"Move "="Переместить:  "
+"Enter maximum number of previous searches to save."="Максимум сохраняемых предыдущих запросов"
+
+#------------Search+Icon.kmm---------------------------------------------------------------
+"Click this button or type into the URL bar and press "="Нажмите эту кнопку или введите искомое в адресную строку и нажмите "
+" to search the web. Right-click to choose a different search engine."=" для поиска в Сети. Для выбора другого поисковика нажмите правую кнопку мыши"
+
+
+

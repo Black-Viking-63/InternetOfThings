@@ -1,0 +1,75 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+#
+# browser.kmm v.0.5 Pro -----------------------------------------------------------------------------------
+#
+# Dependencies	: main.kmm
+# Preferences	: kmeleon.plugins.macros.browser.
+# Author		: adodupan
+#                 last changes for better localization and more precise description in GUI (by rodocop)
+# -----------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."browser;";
+$OnInit=$OnInit."_browser_01;_browser_02;";
+$__browser_10="kmeleon.plugins.macros.browser.";
+$_openin=_("Open in");
+$_delete=_("Delete");
+
+_browser_01{
+	setmenu("&Pro",popup,"&Open in other app",2);
+	setmenu("&Open in other app",macro,"&Add a new app",_browser_04,0);
+	setmenu("&Open in other app",separator,-1);
+}
+_browser_02{
+	$List=getpref(STRING,$__browser_10."items"); $ExecMacros="_browser_03"; &ExecMacros_List;
+}
+_browser_03{
+	setmenu(DocumentOpenExternal,macro,$_openin." ".$ListItem,"_browser_07(".$ListItem.")");
+	setmenu(LinkOpenExternal,macro,$_openin." ".$ListItem,"_browser_08(".$ListItem.")");
+	setmenu(_Go_Open,macro,$_openin." ".$ListItem,"_browser_09(".$ListItem.")");
+	setmenu("&Open in other app",macro,$_delete." ".$ListItem,"_browser_05(".$ListItem.")");
+}
+_browser_04{
+	macroinfo=_("Type the name for the new app!");
+	$__browser_11=prompt(_("The name will appear as an item in the menu"),_("Name of application"),_("The name should be unique!")); 
+	if($__browser_11=="The name should be unique!" or index($__browser_11,";")>-1 or index(getpref(STRING,$__browser_10."items"),$__browser_11.";")>-1) {
+		$__browser_12=confirm(_("Try again with another name!"),_("Name of application"),YESNO,QUESTION);
+		$__browser_12=="YES"?&_browser_04:0;
+	}else{
+		setpref(STRING,$__browser_10."items",getpref(STRING,$__browser_10."items").$__browser_11.";");
+		$__browser_13=$__browser_11; &_browser_06; &_browser_02;
+	}
+}
+_browser_05{
+	macroinfo=_("Delete from the list");
+	$__browser_14=$ARG;
+	setpref(STRING,$__browser_10."items",sub($__browser_14.";","",getpref(STRING,$__browser_10."items")));
+	getpref(STRING,$__browser_10."items")==""?delpref($__browser_10."items"):0;
+	delpref($__browser_10.$__browser_14.".path");
+	setmenu(DocumentOpenExternal,macro,$_openin." ".$__browser_14,);
+	setmenu(LinkOpenExternal,macro,$_openin." ".$__browser_14,);
+	setmenu(_Go_Open,macro,$_openin." ".$__browser_14,);
+	setmenu("&Open in other app",macro,$_delete." ".$__browser_14,);
+}
+_browser_06{
+	setpref(STRING,$__browser_10.$__browser_13.".path",promptforfile("",$__browser_13,"*.exe"));
+	if(getpref(STRING,$__browser_10.$__browser_13.".path")=="") {
+		delpref($__browser_10.$__browser_13.".path");
+		setpref(STRING,$__browser_10."items",sub($__browser_13.";","",getpref(STRING,$__browser_10."items")));
+		getpref(STRING,$__browser_10."items")==""?delpref($__browser_10."items"):0;
+	}
+}
+_browser_07{
+	macroinfo=_("Open in this app");
+	$__browser_15=$ARG;
+	exec(getpref(STRING,$__browser_10.$__browser_15.".path")." ".$URL);
+}
+_browser_08{
+	macroinfo=_("Open in this app");
+	$__browser_16=$ARG;
+	exec(getpref(STRING,$__browser_10.$__browser_16.".path")." ".$LinkURL);
+}
+_browser_09{
+	macroinfo=_("Open in this app");
+	$__browser_17=$ARG;
+	$__browser_18=$URLBAR; $__browser_18==""?$__browser_18=$URL:0;
+	exec(getpref(STRING,$__browser_10.$__browser_17.".path")." ".$__browser_18);
+}

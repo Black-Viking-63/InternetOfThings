@@ -1,0 +1,88 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+#----------- UltraSurf: run portable app to bypass censorship ---------------------------
+#
+#----------- Tools:	Ultrasurf.exe portable (u.ini included for preconfigured options)
+#----------- Version:	1.0
+#----------- Date:	10/03/2017
+#----------- Author:	rodocop
+#----------- HELP:	Ultrasurf being started loads unblocking proxy on local port 9666
+#-----------		and runs hidden. To show app windows press Ctrl+Alt+S
+#----------------------------------------------------------------------------------------
+
+$_ultrasurf_path=getfolder(RootFolder)."\\tools\\unblocksurf";
+
+#_ultrasurf_sync_toolbar{
+#}
+
+_ultrasurf_launch{
+$_RCOUNT = getpref(INT,"kmeleon.ultrasurf.runcount");
+$_RCOUNT2 = $_RCOUNT+1;
+exec($_ultrasurf_path."\\ultrasurf.exe");
+setpref(INT,"network.proxy.type",5);
+setaccel("CTRL ALT SHIFT S","sessions(Save)");
+setbuttonimg("UltraSurf","macros(_ultrasurf_toggle)","ultrasurf-hot.ico"); 
+statusbar(_("UltraSurf is running! Enjoy censorship-free Internet!"));
+setpref(INT,"kmeleon.ultrasurf.runcount",$_RCOUNT2);
+}
+
+_ultrasurf_closecheck{
+getpref(BOOL,"kmeleon.ultrasurf.active")?&_ultrasurf_close:0;
+}
+
+_ultrasurf_close{
+#exec($_ultrasurf_path."\\taskkill.exe \/im ultrasurf.exe"); ##--use this line instead of next one only if close command doesn't work (it means you doesn't have taskkill.exe in your system folder)
+exec("taskkill.exe \/im ultrasurf.exe");
+setpref(BOOL,"kmeleon.ultrasurf.active", false);
+setaccel("CTRL ALT S","sessions(Save)");
+setbuttonimg("UltraSurf","macros(_ultrasurf_toggle)","ultrasurf-dead.ico"); 
+checkbutton("UltraSurf app","macros(ultrasurf_launch)",getpref(BOOL,"kmeleon.ultrasurf.active")==false) ;
+statusbar(_("UltraSurf is closed! All standard settings are restored"));
+setpref(INT,"network.proxy.type",0);
+}
+
+_ultrasurf_toggle{
+macroinfo=_("Switch UltraSurf on|off. Grey icon - off. Colorized - on");
+$_RCOUNT3 = getpref(INT,"kmeleon.ultrasurf.runcount");
+$_RCOUNT3==0?&_ultrasurf_help:0;
+togglepref(BOOL,"kmeleon.ultrasurf.active");
+getpref(BOOL,"kmeleon.ultrasurf.active")?&_ultrasurf_launch:&_ultrasurf_close;
+checkbutton("UltraSurf","macros(_ultrasurf_toggle)",getpref(BOOL,"kmeleon.ultrasurf.active"));
+}
+
+_ultrasurf_help{
+macroinfo=_("Get quick help on using Ultrasurf in K-Meleon");
+$_locale=getpref(STRING,"general.useragent.locale");
+$alertxt1 = readfile(getfolder(MacroFolder)."\\ultrasurf\\alert1.".$_locale);
+$alertxt2 = readfile(getfolder(MacroFolder)."\\ultrasurf\\alert2.".$_locale);
+$alertxt3 = readfile(getfolder(MacroFolder)."\\ultrasurf\\alert3.".$_locale);
+alert($alertxt1,"UltraSurf quick help",INFO);
+alert($alertxt2,"UltraSurf quick help 2",INFO);
+alert($alertxt3,"UltraSurf quick help 3",INFO);
+#alert("=== R E A D   t h i s   H E L P !!! === \n\n1] UltraSurf button starts proxy on localhost:9666 \n2] It sets proxy type to SYSTEM so you're connected immediately! \n3] Yes! All is done automatically! No buzz! \n4] Icon change shows if Ultrasurf is active [grey - off | color - on] \n\n5] Click the button again to exit Ultrasurf \n\n6] Ultrasurf runs hidden by default \n7] To show app window press Ctrl+Alt+S","UltraSurf quick help",INFO);
+#alert("K-Meleon uses 'Ctrl+Alt+S' to save named sessions by default \nbut when Ultrasurf is active you can use 'Ctrl+Alt+Shift+S' instead \n\nAfter you close Ultrasurf default K-Meleon hotkey restores","UltraSurf help 2",INFO);
+#alert("=== I M P O R T A N T !!! === \n\nUltraSurf needs 2-5 seconds to load and connect! \n\n=== This help is shown automatically only once === \n=== Next time use right-click menu to read this again! ===","UltraSurf help 3",INFO);
+}
+
+ultrasurf_BuildMenu{
+setmenu(Main, popup,"&Pro",-1);
+setmenu("&Pro",inline,ultrasurf,-1);
+setmenu("&Pro",separator,-1);
+setmenu(ultrasurf,popup,"UltraSurf");
+setmenu("UltraSurf",macro,"Toggle Ultrasurf",_ultrasurf_toggle);
+setmenu("UltraSurf",macro,"Ultrasurf Help",_ultrasurf_help);
+#setpref(BOOL,"kmeleon.ultrasurf.active", false);
+}
+
+ultrasurf_BuildToolbar{
+$_ultrasurf_tip1=_("Toggle Ultrasurf state. Right-click for help");
+pluginmsg(toolbars,"AddToolbar","UltraSurf,16,16","");
+addbutton("UltraSurf","macros(_ultrasurf_toggle)","UltraSurf",$_ultrasurf_tip1);
+setbuttonimg("UltraSurf","macros(_ultrasurf_toggle)","ultrasurf-dead.ico","ultrasurf-hot.ico","ultrasurf-dead.ico"); 
+}
+
+$OnInit=$OnInit."ultrasurf_BuildMenu;";
+$OnSetup=$OnSetup."ultrasurf_BuildToolbar;";
+$OnQuit=$OnQuit."_ultrasurf_closecheck;";
+# ----------------------------------------------
+$macroModules=$macroModules."ultrasurf;";

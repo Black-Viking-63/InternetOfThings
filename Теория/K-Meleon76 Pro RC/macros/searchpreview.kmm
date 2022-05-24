@@ -1,0 +1,47 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+chkspreview{
+$spreview=getpref(BOOL,"kmeleon.extensions.searchpreview.active");
+$spreview==true?&googcheck:0;
+}
+
+googcheck{
+substr($URLBAR,0,17)=="http://www.google"?&injectpreview:&bingcheck;
+}
+
+bingcheck{
+substr($URLBAR,0,15)=="http://www.bing"?&injectpreview:&yahcheck;
+}
+
+yahcheck{
+substr($URLBAR,0,19)=="http://search.yahoo"?&injectpreview:0;
+}
+
+injectpreview{
+$sjspath=getfolder(RootFolder)."\\macros\\searchpreview\\searchpreview.js";
+injectJS(readfile($sjspath));
+}
+
+spreviewer{
+menuchecked=(getpref(BOOL,"kmeleon.extensions.searchpreview.active")=="true");
+togglepref(BOOL,"kmeleon.extensions.searchpreview.active");
+$spreview=getpref(BOOL,"kmeleon.extensions.searchpreview.active");
+$spreview==true?&spreviewon:&spreviewoff;
+}
+
+spreviewon{
+statusbar("   search-preview activated");
+}
+
+spreviewoff{
+statusbar("   search-preview disactivated");
+}
+
+spreview_BuildMenu{
+setmenu("&Web Search",macro,"Preview",spreviewer,1);
+}
+
+$OnInit=$OnInit."spreview_BuildMenu;";
+$OnLoad=$OnLoad."chkspreview;";
+# --------------------------------------------------------------------
+$macroModules=$macroModules."searchpreview;"; 

@@ -1,0 +1,64 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+# ---------- imagerotator
+
+
+imgrot90{
+$BASE = basename( $ImageURL);
+$cssrot1=("IMG[src*=\"");
+$cssrot2=("\"]");
+$cssrot3=("{-moz-transform:rotate(90deg)}");
+$cssrot4=($cssrot1.$BASE.$cssrot2.$cssrot3);
+injectCSS($cssrot4);
+}
+
+imgrot180{
+$BASE = basename( $ImageURL);
+$cssrot1=("IMG[src*=\"");
+$cssrot2=("\"]");
+$cssrot3=("{-moz-transform:rotate(180deg)}");
+$cssrot4=($cssrot1.$BASE.$cssrot2.$cssrot3);
+injectCSS($cssrot4);
+}
+
+imgrot270{
+$BASE = basename( $ImageURL);
+$cssrot1=("IMG[src*=\"");
+$cssrot2=("\"]");
+$cssrot3=("{-moz-transform:rotate(270deg)}");
+$cssrot4=($cssrot1.$BASE.$cssrot2.$cssrot3);
+injectCSS($cssrot4);
+}
+
+imgrot360{
+$BASE = basename( $ImageURL);
+$cssrot1=("IMG[src*=\"");
+$cssrot2=("\"]");
+$cssrot3=("{-moz-transform:rotate(360deg)}");
+$cssrot4=($cssrot1.$BASE.$cssrot2.$cssrot3);
+injectCSS($cssrot4);
+}
+
+
+flipimg{
+$BASE = basename( $ImageURL);
+$cssrot1=("IMG[src*=\"");
+$cssrot2=("\"]");
+$cssrot3=("{-moz-transform: scaleX(-1)}");
+$cssrot4=($cssrot1.$BASE.$cssrot2.$cssrot3);
+injectCSS($cssrot4);
+}
+
+
+imgrot_BuildMenu{
+setmenu(ImageView,popup,"Image Rotate",-1);
+setmenu("Image Rotate",macro,"Rotate 90°",imgrot90);
+setmenu("Image Rotate",macro,"Rotate 180°",imgrot180);
+setmenu("Image Rotate",macro,"Rotate 270°",imgrot270);
+setmenu("Image Rotate",separator,-1);
+setmenu("Image Rotate",macro,"Mirror Flip",flipimg);
+setmenu("Image Rotate",macro,"Restore Angle",imgrot360);
+}
+
+# ------------------------------------------------------------------------------------
+$OnInit=$OnInit."imgrot_BuildMenu;";
+$macroModules=$macroModules."imagerotatro;";

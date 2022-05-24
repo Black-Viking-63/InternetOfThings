@@ -1,0 +1,25 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- Paste&Go Hack v.0.1 ---------------------------------------------------------------------------
+#
+# Dependencies	: main.kmm ($macroPrefBranch, JS)
+# Resources	: -
+# Author	: rodocop
+# Date		: 24/08/2015
+# Info		: this file contains single additional macro to open URL from clipboard in new tab
+#		  through 'document' context-menu (called by right-click on the empty space of webpage)
+#		  2 items are added but first one is provided by Go_Paste macro from main.kmm
+#-----------------#####################################################-------------------------------------
+# KML info	: 2 strings need the localization (view pro-fixes.kml provided with pastegohack.kmm):
+#		  - Open &URL from Clipboard=
+#		  - Open URL from Clipboard in Ne&w=
+# ----------------------------------------------------------------------------------------------------------
+
+Go_PasteNew{
+macroinfo=_("Open Clipboard contents as URL in new tab");
+$_url=getclipboard();
+opentab($_url); 
+}
+
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."pastegohack;";

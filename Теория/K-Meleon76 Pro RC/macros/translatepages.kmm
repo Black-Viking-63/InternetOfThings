@@ -1,0 +1,64 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------------------------- Page&Link translator service ------------------------
+# Author:	adopted by rodocop to handle Savedeo service instead FVD
+# Version:	0.1 
+# Date:		31/03/2017
+#----------------------------------------------------------------------------------- 
+
+transpage_goo{
+macroinfo=_("Translate this page using Google Translate");
+opentab("https://translate.google.com/translate?ie=UTF-8&act=url&u=".$URL);
+}
+
+transpage_ya{
+macroinfo=_("Translate this page using Yandex Translate");
+opentab("https://translate.yandex.ru/translate?clid=2295662&url=".$URL);
+}
+
+translink_goo{
+macroinfo=_("Translate this link using Google Translate");
+opentab("https://translate.google.com/translate?ie=UTF-8&act=url&u=".$LinkURL);
+}
+
+translink_ya{
+macroinfo=_("Translate this link using Yandex Translate");
+opentab("https://translate.yandex.ru/translate?clid=2295662&url=".$LinkURL);
+}
+
+transframe_goo{
+macroinfo=_("Translate this frame using Google Translate");
+opentab("https://translate.google.com/translate?ie=UTF-8&act=url&u=".$FrameURL);
+}
+
+transframe_ya{
+macroinfo=_("Translate this frame using Yandex Translate");
+opentab("https://translate.yandex.ru/translate?clid=2295662&url=".$FrameURL);
+}
+
+transpages_BuildMenu{
+setmenu("&Pro",inline,TranslatePage,-1);
+setmenu("&Pro",separator,-1);
+setmenu(TranslatePage,macro,"GoogleTranslate page",transpage_goo);
+setmenu(TranslatePage,macro,"YandexTranslate page",transpage_ya);
+setmenu("Page Pro Services",macro,"GoogleTranslate page",transpage_goo);
+setmenu("Page Pro Services",macro,"YandexTranslate page",transpage_ya);
+setmenu("Page Pro Services",separator,-1);
+setmenu("Link Pro Services",macro,"GoogleTranslate link",translink_goo);
+setmenu("Link Pro Services",macro,"YandexTranslate link",translink_ya);
+setmenu("Link Pro Services",separator,-1);
+setmenu("Frame Pro Services",macro,"GoogleTranslate frame",transframe_goo);
+setmenu("Frame Pro Services",macro,"YandexTranslate frame",transframe_ya);
+setmenu("Frame Pro Services",separator,-1);
+}
+
+#transpages_BuildToolbar{
+#$savvs_Tooltip=_("VideoSaver");
+#pluginmsg(toolbars,"AddToolbar","VideoSaver,16,16","");
+#$savvs=(pluginmsg(toolbars,"AddButton","VideoSaver,savvs,macros("."savvs"."),"."Extra #Services".",".$savvs_Tooltip.",16,16,"."flashvideodownloader.bmp[1],flashvideodownloader.bmp[0]",""));
+#}
+
+$OnInit=$OnInit."transpages_BuildMenu;";
+#$OnSetup=$OnSetup."transpages_BuildToolbar;";
+# ---------------------------------------------------------------------------------
+$macroModules=$macroModules."translatepages;";

@@ -1,0 +1,37 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+#
+# Reopen closed Tabs.
+ 
+_myOption{
+$_opt = urldecode($ARG) ;
+$_opt!="dummy"?opentab($_opt):0;
+ 
+ }
+ 
+myOption_BuildMenu{
+setmenu("&Sessions",popup,"Undo closed tab",-1);
+setmenu("TabButtonPopup",popup,"Undo closed tab",-1);
+setmenu( "Undo closed tab","macro","Recent closed tabs","_myOption(dummy)");
+setmenu( "Undo closed tab",separator,-1);
+}
+ 
+createList{
+    $index = $index + 1;
+     
+$URLa = urlencode($URL);
+setmenu("Undo closed tab" , macro , $TITLE , "_myOption(".$URLa.")");
+
+
+ 
+    if ($index==4){
+            $index=0;
+                }
+ 
+ #end createList
+ }
+ 
+ 
+$OnInit=$OnInit."myOption_BuildMenu;";
+$OnCloseTab=$OnCloseTab."createList;";
+#_______________________________________
+$macroModules=$macroModules."myOption;";

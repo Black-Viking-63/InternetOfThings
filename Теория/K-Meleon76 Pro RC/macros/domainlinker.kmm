@@ -1,0 +1,24 @@
+ # K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- opens homepages of download links to check what other programs they have etc--------------------------------------------------------------------------
+#
+# Dependencies : 
+# Resources : -
+# Preferences : -
+#
+# ------------------------------------------------------------------------------------------------------------------
+
+domainlink{
+$HOST = hostname( $LinkURL );
+$OpenURL="".$HOST; $ExecMacros="OpenURL_InNew"; &ExecMacros_Frames;}
+
+# ----- PRIVATE
+
+_domainlink_BuildMenu{
+setmenu(LinkSave,macro,"Open Domain",domainlink,2);
+}
+
+$OnInit=$OnInit."_domainlink_BuildMenu;";
+
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."domainlink;";

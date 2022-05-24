@@ -1,0 +1,76 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+###### TEST   2015-09-22
+
+# ---------- IEtab Web Services / External Applications ----------------------------------------------------------
+# (old original macros edited and updated by siria for use with K-Meleon 75 and newer)
+#
+# Dependencies	:
+# Resources	: -
+# Preferences	: -
+# Version	: 75.0
+# Discussion	: http://kmeleonbrowser.org/forum/read.php?9,131129 
+# ------------------------------------------------------------------------------------------------------------------
+
+
+$OnLoad=$OnLoad."IEtab_test1;";
+
+IEtab_test1{
+### alert($URL."\n".$URLBAR,"ietab-test1:  URL/URLBAR = same?");
+if ($URL != $URLBAR) {
+$_x=basename($URLBAR);
+$_x=substr($_x,length($_x)-6);
+if (index($_x,".mht")>-1)  {
+### index($URL,"chrome")==0 ? 0 : open("chrome://ietab/content/ietab.html?url=".$URLBAR);
+$_url=$URLBAR;
+index($_url,"file:///")==0 ? 0 : $_url="file:///".gsub("\\","/",$_url);
+opentab("chrome://ietab/content/ietab.html?url=".$_url);
+}}}
+
+IEtab_OpenInIEtab{
+macroinfo="Open in KM using IE-engine (Trident)";
+$_x=promptforfile("","Open in IE-Tab (*.mht etc.)","*.*");
+### $_x=promptforfile("","Open in IE-Tab (*.mht)","*.mht*");
+if ($_x>"") {
+### alert($_x,"ietab-test2: path");
+opentab("chrome://ietab/content/ietab.html?url=file:///".gsub("\\","/",$_x));
+}}
+
+##########################
+
+IEtab_OpenPage{
+opentab("chrome://ietab/content/ietab.html?url=".$URL);
+}
+
+IEtab_OpenLink{
+opentab("chrome://ietab/content/ietab.html?url=".$LinkURL);
+}
+
+chrometab_Openpage{
+$twitclear= gsub( "/#!/", "/", $URL);
+opentab("chrome://ietab/content/ietab2.html?url=gcf:".$twitclear);
+}
+
+chrometab_Openlink{
+$twitclear= gsub( "/#!/", "/", $LinkURL);
+opentab("chrome://ietab/content/ietab2.html?url=gcf:".$twitclear);
+}
+
+IEtab_Pref{
+opennew("chrome://ietab/content/ietabSetting.xul"); 
+}
+
+_IEtab_BuildMenu{
+setmenu($_SendTo_Page,macro,"WebKit Render",chrometab_Openpage,-1);
+setmenu($_SendTo_Link,macro,"WebKit Render",chrometab_Openlink,-1);
+setmenu($_SendTo_Page,macro,"Trident Render",IEtab_OpenPage,-1);
+setmenu($_SendTo_Link,macro,"Trident Render",IEtab_OpenLink,-1);
+#setmenu("_Config_General",macro,"&IEtab Config",IEtab_Pref,1);
+#
+setmenu("OpenSave",macro,"Open in IE-Tab",IEtab_OpenInIEtab,"&Save Page As...");
+setmenu("Compact Menu",macro,"Open in IE-Tab",IEtab_OpenInIEtab,"&Save Page As...");
+}
+
+$OnInit=$OnInit."_IEtab_BuildMenu;";
+# -----------------------------------------------------------------------------------------------
+$macroModules=$macroModules."IEtab;";

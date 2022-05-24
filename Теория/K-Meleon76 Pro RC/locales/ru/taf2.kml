@@ -1,0 +1,22 @@
+#----status bar text -- поясняющая информация в статус баре
+Toggle Find As You Type error sound=Вкл./выкл. звук ошибки поиска
+Set Find As You Type sound=Установить тип звука для ошибки поиска
+Toggle Find As You Type timeout=Вкл./выкл. таймаут функции поиска по мере набора
+Set Find As You Type timeout=Установить длительность таймаута функции поиска по мере набора
+Set colour for highlighting text that matches input=Установить цвет подсветки найденного текста
+
+#----menu items ------- пункты меню
+Sound when no match for input=Звук ошибки при отсутствии вводимого текста
+Set error sound=Установить тип звука ошибки
+Search timeout is on=Таймаут поиска включен
+Set timeout value=Установить значение таймаута
+Set highlighter colour=Задать цвет подсветки найденного
+
+#----prompts -----------заголовки и пояснения в окнах ввода параметров
+'beep', 'default' or exact path to wav-file [ENTER: current || ESC: blank]:='beep', 'default' или путь к wav-файлу [ОК: не менять || ESC: без звука]
+Set sound for search error [String]=Установить звук ошибки поиска [Строка]
+Enter the timeout value in milliseconds [ENTER: current || ESC: '0']:=Таймаут в миллисекундах [OK: не менять || Отмена: '0']
+Set timeout for Page Search [Integer]=Установить таймаут функции поиска [Целое]
+Use the '#rrggbb' format [ENTER: current || ESC: blank]:=В формате '#rrggbb' [ОК: текущая || Отмена: без подсветки]
+Set text highlighter colour [String]=Установить значение цвета подсветки [Строка]
+

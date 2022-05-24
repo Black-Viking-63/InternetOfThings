@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<engines version="1.1" caption="Search Engines for K-Meleon Search Macros">
+<engine caption="Acronym Finder"
+	url="https://www.acronymfinder.com/~/search/af.aspx?Acronym="/>
+<engine caption="AlltheWeb.com"
+	url="http://www.alltheweb.com/search?q="/>
+<engine caption="Alternativeto.net - similar apps search" 
+	url="https://alternativeto.net/browse/search?q="/>
+<engine caption="Amazon.com"
+	url="https://www.amazon.com/s/?field-keywords="/>
+<engine caption="Answers.com"
+	url="http://www.answers.com/"/>
+<engine caption="AOL Image Search"
+	url="https://search.aol.com/aol/image?q="/>
+<engine caption="AOL News Search"
+	url="https://search.aol.com/aol/news?q="/>
+<engine caption="AOL Search"
+	url="https://search.aol.com/aol/search?q="/>
+<engine caption="AOL Video"
+	url="https://www.aol.com/video/search/?q="/>
+<engine caption="Ask.com"
+	url="http://www.ask.com/web?q="/>
+<engine caption="Astalavista.box.sk"
+	url="http://astalavista.box.sk/cgi-bin/robot?srch="/>
+<engine caption="Baidu"
+	url="http://www.baidu.com/s?wd="/>	 
+<engine caption="Bing - Images"
+	url="https://www.bing.com/images/search?q="/>
+<engine caption="Bing - Maps"
+	url="https://www.bing.com/maps/default.aspx?q="/>
+<engine caption="Bing - News"
+	url="https://www.bing.com/news/search?q="/>
+<engine caption="Bing - Shopping"
+	url="https://www.bing.com/shopping/search?q="/>
+<engine caption="Bing - Videos"
+	url="https://www.bing.com/videos/search?q="/>
+<engine caption="Bing - Web"
+	url="https://www.bing.com/search?q="/>
+<engine caption="Del.icio.us"
+	url="https://del.icio.us/search?p="/>
+<engine caption="Dictionary.com"
+	url="http://dictionary.reference.com/browse/"/>
+<engine caption="DuckDuckGo"
+	url="https://duckduckgo.com/?q="/>	
+<engine caption="eBay.com"
+	url="http://www.ebay.com/sch/i.html?_sacat=1&amp;_nkw=11"/>
+<engine caption="GameFAQs Search"
+	url="http://www.gamefaqs.com/search/index.html?platform=0&amp;game="/>
+<engine caption="Gigablast"
+	url="http://www.gigablast.com/search?q="/>
+<engine caption="Google"
+	url="https://www.google.com/search?client=kmeleon&amp;q="/>
+<engine caption="Google - 100 Results"
+	url="https://www.google.com/search?client=kmeleon&amp;num=100&amp;q="/>
+<engine caption="Google - Browse by name"
+	url="https://www.google.com/search?client=kmeleon&amp;ie=UTF-8&amp;fns=1&amp;q="/>
+<engine caption="Google - I'm feeling lucky"
+	url="https://www.google.com/search?client=kmeleon&amp;btnI=1&amp;q="/>
+<engine caption="Google Groups"
+	url="https://groups.google.com/groups/search?client=kmeleon&amp;q="/>
+<engine caption="Google Images"
+	url="https://www.google.com/images?client=kmeleon&amp;q="/>
+<engine caption="Google Maps"
+	url="https://maps.google.com/maps?client=kmeleon&amp;q="/>
+<engine caption="Google News"
+	url="https://news.google.com/news?client=kmeleon&amp;q="/>
+<engine caption="Google Product Search"
+	url="https://www.google.ru/search?client=kmeleon&amp;tbm=shop&amp;q="/>
+<engine caption="Google Academy"
+	url="https://scholar.google.com/scholar?client=kmeleon&amp;q="/>
+<engine caption="HowStuffWorks"
+	url="http://www.howstuffworks.com/search.php?terms="/>
+<engine caption="Internet Archive Wayback Machine"
+	url="http://web.archive.org/web/*/"/>
+<engine caption="IMDb (International)"
+	url="http://akas.imdb.com/find?&amp;q="/>
+<engine caption="Ixquick Startpage search"
+	url="http://ixquick.com/do/metasearch.pl?query="/>
+<engine caption="Ixquick Full Metasearch"
+	url="https://www.ixquick.eu/do/search?prf=0fdcbe3da181aed2ededdbc24bedd7c4&amp;cat=web&amp;query="/>
+<engine caption="Ixquick Safe Metasearch"
+	url="https://www.ixquick.eu/do/search?prf=1c11deba2729fda0afbdb054567d93d1&amp;cat=web&amp;query="/>
+<engine caption="K-Meleon Forums Search"
+	url="http://kmeleonbrowser.org/forum/search.php?forum_id=0&amp;match_forum=ALL&amp;match_dates=0&amp;match_type=ALL&amp;search="/>
+<engine caption="K-Meleon Support Search with Google"
+	url="https://www.google.ru/search?q=site:kmeleonbrowser.org+"/>
+<engine caption="LEO English-German Dictionary"
+	url="https://dict.leo.org/englisch-deutsch/"/>
+<engine caption="Lycos"
+	url="http://search.lycos.com/?tab=web&amp;query="/>
+<engine caption="Mapquest map search"
+	url="https://www.mapquest.com/search/results?query="/>
+<engine caption="Merriam-Webster Online Dictionary"
+	url="http://www.merriam-webster.com/dictionary/"/>
+<engine caption="MetaCrawler"
+	url="http://www.metacrawler.com/serp?q="/>
+<engine caption="MobyGames"
+	url="http://www.mobygames.com/search/quick?q="/>
+<engine caption="OneLook Dictionary Search"
+	url="http://www.onelook.com/?w="/>
+<engine caption="Softpile.com"
+	url="https://www.softpile.com/?s="/>
+<engine caption="Search.com"
+	url="https://www.search.com/search?q="/>
+<engine caption="SnapFiles"
+	url="http://www.snapfiles.com/downloadfind.php?action=s&amp;search=Find+it&amp;st="/>
+<engine caption="StartPage"
+	url="https://www.startpage.com/do/search?prf=e088ae87a03ba530f4d9d1456d0b4ef4&amp;cat=web&amp;query="/> 
+<engine caption="StartPage Safe search"
+	url="https://www.startpage.com/do/search?prf=75cf628597300e8340a5c20252a4b417&amp;cat=web&amp;query="/> 
+<engine caption="Wikipedia, The Free Encyclopedia"
+	url="https://en.wikipedia.org/w/index.php?search="/>
+<engine caption="Wikipedia, Die freie Enzyklopädie"
+	url="https://de.wikipedia.org/w/index.php?search="/>
+<engine caption="Wikipédia, L'encyclopédie libre"
+	url="https://fr.wikipedia.org/w/index.php?search="/>
+<engine caption="Wikipedia, La enciclopedia libre"
+	url="https://es.wikipedia.org/w/index.php?search="/>
+<engine caption="Wikipedia Russia"
+	url="https://ru.wikipedia.org/w/index.php?search="/>
+<engine caption="Yahoo! Groups"
+	url="https://groups.yahoo.com/group/"/>
+<engine caption="Yahoo! Images"
+	url="https://images.search.yahoo.com/search/images?p="/>
+<engine caption="Yahoo! Maps"
+	url="https://maps.yahoo.com/map?q1="/>
+<engine caption="Yahoo! Movies"
+	url="https://movies.yahoo.com/mv/search?p="/>
+<engine caption="Yahoo! Search"
+	url="https://search.yahoo.com/bin/search?p="/>
+<engine caption="Yahoo! Shopping"
+	url="https://shopping.yahoo.com/search/all?p="/>
+<engine caption="Yandex"
+	url="https://yandex.ru/search/?clid=2295663&amp;text="/>
+<engine caption="Yandex Translate"
+	url="https://translate.yandex.ru/?clid=2295663&amp;text="/>
+<engine caption="Youtube"
+	url="https://www.youtube.com/results?search_query="/>
+</engines>

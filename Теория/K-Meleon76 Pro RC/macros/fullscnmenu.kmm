@@ -1,0 +1,23 @@
+#  K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#
+# ---------- fullscnmenu.kmm
+# ---------- Toggle between menu show and menu noshow in fullscreen
+#
+# Dependencies        : main.kmm
+# Resources           : fullscreen plugin  
+# Preferences         : "kmeleon.plugins.fullscreen.hide_rebar"
+# Version             : 1.0  2014-07-16  		
+# --------------------------------------------------------------------------------
+
+fullscnmenu_toggle {
+togglepref(BOOL, "kmeleon.plugins.fullscreen.hide_rebar");
+plugin(fullscreen); plugin(fullscreen);
+}
+
+_fullscnmenu_SetAccels {
+	setaccel( "CTRL SHIFT M", "macros(fullscnmenu_toggle)" );
+}
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+$OnInit=$OnInit."_fullscnmenu_SetAccels;";
+$macroModules=$macroModules."fullscnmenu;";

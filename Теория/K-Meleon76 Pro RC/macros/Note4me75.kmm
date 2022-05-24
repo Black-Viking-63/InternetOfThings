@@ -1,0 +1,213 @@
+﻿#  K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage2)
+#  
+# ---------- Note4me.kmm    K-Meleon Macro Language   ----------------------------------
+# ---------- Annotated notetaking by copying selected text and appending -------------------------------------
+# ---------- to a file named Note4me.txt.
+# ---------- The URL and a datetime stamp are prepended to the text.
+#
+# Dependencies	: - main.kmm
+# Preferences	: - "k-meleon_Note4me.FPath" and "k-meleon_Note4me.AltFPath" 
+# Version	: - 75.76
+# Date		: - 24/03/2017
+# Author(s)	: - JamesD (original macro&tools), rodocop (edits for v.75 and newer)
+# Files		: - macros\note4me\Note4me.txt (UTF-8 empty template); macros\note4me\linkify.js (linkifikator)
+# -------------------------------------------------------------------------------------------------------------
+
+_Note4me_GSelect {
+macroinfo = _("Copy selected text to clipboard for appending to Note4me");
+id(ID_EDIT_COPY );
+$_Note4me_text = "\n".date( "%Y-%m-%d %H:%M" )."\n".$URL."\n". getclipboard()."\n\n*** *** *** *** ***\n" ;  
+$_Note4me_File_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+if (fileexists($_Note4me_File_Path)) {macros(_Note4me_append);} 	# this copies premade template in Note4me.txt file not found at target path
+else {									# it fixes non-UTF8 detection and display of notes-file
+macros(_Note4me_copyfiles); 						# added for v.75.76
+macros(_Note4me_append);
+}
+}
+
+_Note4me_append{
+appendfile ($_Note4me_File_Path, $_Note4me_text);
+getpref(INT,"k-meleon_Note4me.startrun")==1 ? macros(_Note4me_showalert) : 0;
+}
+
+_Note4me_showalert {
+macros(_Note4me_preappend);
+delpref("k-meleon_Note4me.startrun");
+macros(_Note4me_alert);
+}
+
+_Note4me_alert {
+alert(_("To use Notes first select the place for note-storage file Note4me.txt"),INFO);
+alert(_("To change note-storage folder later press 'CTRL+4' keys"),INFO);
+macros(Note4me_Configure);
+}
+
+Note4me_Configure {
+$_Note4me_File_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+	# Get only the folder for the current file path
+$_Note4me_Fonly = sub("\\Note4me.txt","",$_Note4me_File_Path);
+	# Prompt for new folder - display current as initial
+$_Note4me_File_PathWON = promptforfolder( _("Enter output folder of your choice.")."\n"._("Cancel returns to default"), $_Note4me_Fonly );
+	# Check to see if user canceled. If cancel return to default otherwise set new values
+$_Note4me_File_PathWON == "" ? macros("_Note4me_Configure_default") : macros("_Note4me_Configure_alternate");
+}
+
+_Note4me_Configure_default {
+getpref(STRING,"k-meleon_Note4me.AltFPath")=="" ? macros(_Note4me_Configure_default2) : macros(_Note4me_Configure_default3);
+}
+
+_Note4me_Configure_default2 {
+$_Note4me_File_Path = $_Note4me_Default_FP;
+setpref(STRING,"k-meleon_Note4me.FPath", $_Note4me_File_Path);
+#alert($_Note4me_File_Path." --default2",INFO); -------- debugging tool
+}
+
+_Note4me_Configure_default3 {
+$_Note4me_File_Path = $_Note4me_Default_FP;
+$_Note4me_Pref_AltPath=getpref(STRING,"k-meleon_Note4me.AltFPath");
+copyfile($_Note4me_Pref_AltPath,$_Note4me_File_Path);
+deletefile($_Note4me_Pref_AltPath);
+setpref(STRING,"k-meleon_Note4me.FPath", $_Note4me_File_Path);
+setpref(STRING,"k-meleon_Note4me.AltFPath","");
+#alert($_Note4me_File_Path." --default3",INFO); -------- debugging tool
+}
+
+_Note4me_Configure_alternate {
+$_Note4me_UserSet_AltPath = $_Note4me_File_PathWON."\\Note4me.txt";
+$_Note4me_Pref_AltPath=getpref(STRING,"k-meleon_Note4me.AltFPath");
+$_Note4me_UserSet_AltPath==$_Note4me_Pref_AltPath ? 0 : macros(_Note4me_Configure_alternate1);
+}
+
+_Note4me_Configure_alternate1 {
+if ($_Note4me_Pref_AltPath=="") {
+macros(_Note4me_Configure_alternate2);
+} 
+else {
+macros(_Note4me_Configure_alternate3);
+}
+} 
+
+_Note4me_Configure_alternate2 {
+$_Note4me_File_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+copyfile($_Note4me_File_Path,$_Note4me_UserSet_AltPath);
+deletefile($_Note4me_File_Path);
+setpref(STRING,"k-meleon_Note4me.FPath", $_Note4me_UserSet_AltPath);
+setpref(STRING,"k-meleon_Note4me.AltFPath", $_Note4me_UserSet_AltPath);
+}
+
+_Note4me_Configure_alternate3 {
+copyfile($_Note4me_Pref_AltPath,$_Note4me_UserSet_AltPath);
+deletefile($_Note4me_Pref_AltPath);
+setpref(STRING,"k-meleon_Note4me.FPath", $_Note4me_UserSet_AltPath);
+setpref(STRING,"k-meleon_Note4me.AltFPath", $_Note4me_UserSet_AltPath);
+}
+
+Note4me_ViewOutside {
+$__path=getpref(STRING,"k-meleon_Note4me.FPath");
+$__data=readfile($__path);
+if ($__data=="") {&_Note4me_FileNotFound;
+ } else {
+ $ext="txt"; &getSecureExtensionHandler;
+ exec(sub("%1",$__path,$cmdline));
+ }
+}
+
+_Note4me_FileNotFound{
+alert(sub("%s",$acfg_File,_("The file %s could not be found.")),_(Note4me),EXCLAIM);
+}
+
+_Note4me_clearnotes{
+$_RESULT = confirm(_("Are you sure to delete all Notes?")."\n\n"._("YES - delete ALL notes and backups")."\n"._("NO - clear notes but keep backup")."\n"._("CANCEL - do NOT delete anything!"),_("Confirm deleting Notes"),YESNOCANCEL,QUESTION);
+$_RESULT==YES ? macros(_Note4me_clearyes) : macros(_Note4me_clearnocancel);
+}
+
+_Note4me_clearyes{
+$_Note4me_Clear_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+$_DELF=deletefile($_Note4me_Clear_Path);
+$_DELF=deletefile($_Note4me_Backup_Path);
+$_DELF==true ? alert(_("Notes and backup were cleared!"),"OK", INFO) : alert(_("Error! File is absent!"),"NO", INFO);
+}
+
+_Note4me_clearnocancel{
+$_RESULT==NO ? macros(_Note4me_clear) : 0;
+}
+
+_Note4me_clear{
+$_Note4me_Clear_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+$_DELF=deletefile($_Note4me_Clear_Path);
+$_DELF==true ? alert(_("Notes were cleared. Backup is in file")." ".$_Note4me_Backup_Path,"OK", INFO) : alert(_("Error! File is absent!"),"NO", INFO);
+}
+
+_Note4me_copyfiles{
+$_COPYF=copyfile($_macro_path."\\note4me\\Note4me.txt",$_Note4me_File_Path);
+}
+
+_Note4me_View {									 ###   New Macro command
+if (fileexists($_Note4me_File_Path)) {
+	$_Note4me_ViewPath=getpref(STRING,"k-meleon_Note4me.FPath");			 ###   for viewing note-file in KM
+	opentab("file:///".$_Note4me_ViewPath);						 ###   added by rodocop
+	$OnLoadOnce=$OnLoadOnce."_N4m_linkify;";
+	} else &_Note4me_FileNotFound;
+}
+			
+
+_N4m_linkify{								#added for v.75.76 by rodocop
+$_LINKIFY=readfile($_macro_path."\\note4me\\linkify.js"); 			#read linkify JS
+injectJS($_LINKIFY);					 			#linkify URLs
+injectJS("void(document.body.firstChild.style.whiteSpace='pre-wrap')");		#wrap text for Note4me file in browser window
+injectJS("window.scrollTo(0,100000)");						#scrool to the bottom - view last additions
+}								 
+
+_Note4me_ModMenu {
+setmenu("SelectedText",inline,"Note4me",-1);                     			###   6 lines
+setmenu("Note4me",macro,_("Send to Note4me"),"_Note4me_GSelect",-1);
+setmenu(_("View Notes"),separator,3);
+setmenu("SelectedText",inline,"View Notes",-1);                     			###   6 lines
+setmenu("Document",inline,_("View Notes"),"_Note4me_View",3);                     	###   added by JamesD and rodocop
+setmenu(_("View Notes"),macro,_("View Notes in New Tab"),"_Note4me_View");     		###   for opening Note4me.txt-file
+setmenu(_("View Notes"),macro,_("View Notes in TextEditor"),"Note4me_ViewOutside");  	###   from page context-menu
+setmenu(_("View Notes"),macro,_("Delete all Notes"),"_Note4me_clearnotes");  		###   in new KM-tab
+setmenu(_("View Notes"),separator,-1); 							###   or default text-editor
+}
+
+_Note4me_SetAccels {
+setaccel("CTRL 4", "macros(Note4me_Configure)");
+setaccel("ALT 4", "macros(_Note4me_GSelect)");
+setaccel("ALT SHIFT 4", "macros(_Note4me_View)");
+}
+
+_Note4me_Get_Path {
+#$_Note4me_Path=getfolder(RootFolder)."\\Tools\\Note4me.exe";			#deprecated as AutoIt exe isn't used now
+$_Note4me_File_Path=getfolder(ProfileFolder)."\\Note4me.txt";
+$_Note4me_Backup_Path=getfolder(ProfileFolder)."\\note4mebackup\\Note4me.txt";
+$_macro_path=getfolder(MacroFolder);
+$_Note4me_Default_FP = $_Note4me_File_Path;
+getpref(STRING,"k-meleon_Note4me.FPath")=="" ? macros(_Note4me_startrun) : 0;  ###   added filling default filepath pref
+getpref(STRING,"k-meleon_Note4me.AltFPath")=="" ? setpref(STRING,"k-meleon_Note4me.FPath",$_Note4me_Default_FP) : setpref(STRING,"k-meleon_Note4me.FPath",getpref(STRING,"k-meleon_Note4me.AltFPath"));
+}
+
+_Note4me_startrun {
+setpref(INT,"k-meleon_Note4me.startrun",1);
+setpref(STRING,"k-meleon_Note4me.FPath",$_Note4me_Default_FP);
+}
+
+_Note4me_backup {
+if (fileexists($_Note4me_Backup_Path)) {
+	$_Note4me_File_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+	if (fileexists($_Note4me_File_Path)) {
+		deletefile($_Note4me_Backup_Path);
+		copyfile($_Note4me_File_Path,$_Note4me_Backup_Path);
+		} else 0;
+	} else {
+	mkdir(getfolder(ProfileFolder)."\\note4mebackup\\");
+	$_Note4me_File_Path = getpref(STRING,"k-meleon_Note4me.FPath");
+	copyfile($_Note4me_File_Path,$_Note4me_Backup_Path);
+	}
+}
+# - - - - - - - - - - - - - - - - - - - - - - 
+
+$OnStartup=$OnStartup."_Note4me_Get_Path;_Note4me_SetAccels;";
+$OnInit=$OnInit."_Note4me_ModMenu;";
+$OnQuit=$OnQuit."_Note4me_backup;";
+
+$macroModules=$macroModules."Note4me;";

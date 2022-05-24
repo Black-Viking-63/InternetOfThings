@@ -1,0 +1,38 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- Open Download Dir and Save Dir v.2 - for K-Meleon 75 ------------------------------------------------------------
+#
+# Dependencies	: -
+# Resources	: -
+# Preferences	: -
+#
+# ------------------------------------------------------------------------------------------------------------------
+
+$_OpenDir_Download=getpref(STRING,"browser.download.dir");
+$_OpenDir_Page=getpref(STRING,"kmeleon.download.saveDir");
+
+# ---------- General -----------------------------------------------------------------------------------------------
+
+OpenDir_Download{
+menugrayed=($_OpenDir_Download=="");
+exec("explorer.exe \"".$_OpenDir_Download."\"");
+}
+
+OpenDir_Page{
+menugrayed=($_OpenDir_Page=="");
+exec("explorer.exe \"".$_OpenDir_Page."\"");
+}
+
+# ---------- PRIVATE -----------------------------------------------------------------------------------------------
+
+_OpenDir_BuildMenu{
+# edit menu
+setmenu("C&onfiguration",macro,"Open Do&wnload Dir",OpenDir_Download,-1);
+setmenu("C&onfiguration",macro,"Open Sa&ved Pages Dir",OpenDir_Page,-1);
+
+}
+
+$OnInit=$OnInit."_OpenDir_BuildMenu;";
+
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."OpenDir;";

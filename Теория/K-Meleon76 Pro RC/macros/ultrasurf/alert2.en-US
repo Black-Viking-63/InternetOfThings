@@ -1,0 +1,4 @@
+K-Meleon uses 'Ctrl+Alt+S' to save named sessions by default 
+but when Ultrasurf is active you can use 'Ctrl+Alt+Shift+S' instead 
+
+After you close Ultrasurf, default K-Meleon hotkey restores

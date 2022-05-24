@@ -1,0 +1,21 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ------------------------ Pro Services context menus ---------------------------------
+# ---------- adds menus for power functions of K-Meleon PRO build ---------------------
+# version:	1.0 Pro
+# date:		30.03.2017
+# author:	rodocop 
+# -------------------------------------------------------------------------------------
+
+proservmenu_BuildMenu{
+setmenu(Document,inline,pro_page,-1);
+setmenu(pro_page,popup,"Page Pro Services");
+setmenu(Link,inline,pro_link,-1);
+setmenu(pro_link,popup,"Link Pro Services");
+setmenu("&Frame",inline,pro_frame,-1);
+setmenu(pro_frame,popup,"Frame Pro Services");
+}
+
+$OnInit=$OnInit."proservmenu_BuildMenu;";
+# ---------------------------------------------------------------------------
+$macroModules=$macroModules."proservmenu;"; 

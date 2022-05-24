@@ -1,0 +1,58 @@
+﻿# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- aboutpages.kmm (about: pages opener) ------------------------------------------------------------------
+#
+# Dependencies : main.kmm (OpenURL)
+# Resources :    -
+# Preferences :  -
+# Warning :      to use it, don't forget to uncheck mtypes.kmm in preferences
+#                no more needed, as install disable it
+# ------------------------------------------------------------------------------------------------------------------
+
+aboutpages{
+macroinfo=_("Open List of about: pages");
+$OpenURL="about:about";&OpenURL_InNew;
+}
+
+aboutmemory{
+macroinfo=_("Open Memory Manager");
+$OpenURL="about:memory";&OpenURL_InNew;
+}
+
+aboutdownloads{
+macroinfo=_("Open Download Manager");
+$OpenURL="about:downloads";&OpenURL_InNew;
+}
+
+aboutaddons{
+macroinfo=_("Open Firefox Addons Manager");
+$OpenURL="about:addons";&OpenURL_InNew;
+}
+
+aboutprefs{
+macroinfo=_("Open Preferences like in Firefox");
+$OpenURL="about:preferences";&OpenURL_InNew;
+}
+
+# ----- PRIVATE
+
+_aboutpages_BuildMenu{
+# edit menu
+#setmenu(Tools,inline,_Addons_manager); 
+#setmenu(Tools,inline,_about_pages); 
+#setmenu(Tools,inline,_Memory_manager); 
+# setmenu(Tools,inline,_Downloads_manager); 
+#setmenu(About,macro,"Addons manager",_aboutaddons); 
+setmenu("&Pro",inline,ABpages,-1);
+setmenu(ABpages, popup, "Advanced Management", 1);
+setmenu("Advanced Management",macro,"All about:pages",aboutpages); 
+setmenu("Advanced Management",macro,"Memory manager",aboutmemory); 
+setmenu("Advanced Management",macro,"Download manager",aboutdownloads);
+setmenu("Advanced Management",macro,_("Addons manager"),aboutaddons);   
+setmenu("Advanced Management",macro,_("Firefox-style Preferences"),aboutprefs);   
+}
+
+$OnInit=$OnInit."_aboutpages_BuildMenu;";
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."aboutpages;";
+

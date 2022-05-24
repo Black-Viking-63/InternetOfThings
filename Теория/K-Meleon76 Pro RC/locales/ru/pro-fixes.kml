@@ -1,0 +1,7 @@
+# K-Meleon Localization (UTF-8)
+#--------special fixes and additions for K-Meleon Pro by rodocop (ru-locale)
+#--------добавления и исправления для K-Meleon Pro
+
+#-------------------------pastegohack.kmm --------------------------------------
+Open &URL from Clipboard=Открыть ссылку из буфера обмена в этой вкладке
+Open URL from Clipboard in Ne&w=Открыть ссылку из буфера обмена в новой вкладке

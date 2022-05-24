@@ -1,0 +1,29 @@
+#Popup menu name in Edit->Configuration
+Restart2 Options=Опции перезапуска
+
+#Menu item in 'File'
+Restart2=Перезапуск КМ
+
+#Menu items for Restart2 Options and for the toolbar button
+Open LastSession=Открывать последнюю сохраненную сессию
+Alternate Button=Альтернативная кнопка
+Auto Error Console=Автозапуск консоли ошибок
+File CloseWindow menu=Добавить команду в меню "Файл"
+
+#tooltip for button
+Restart K-Meleon - Right click for menu.=Перезапуск браузера. Нажмите правую кнопку мыши, чтобы открыть меню опций
+
+#messages for old versions - 74 and earlier
+This K-Meleon version is too old to contain the required resources=Эта версия K-Meleon устарела. Попробуйте Restart для КМ 1.6 (http://kmext.sourceforge.net/)
+Restart2 will be set not to load on subsequent K-Meleon starts=Текущая версия расширения будет отключена.
+Restart2.kmm failed to install.=Макрос Restart2 не был установлен
+
+#statusbar messages
+restart with last session enabled=Перезапуск с принудительной загрузкой последней сессии
+restart with last session disabled=Перезапуск браузера с загрузкой, предусмотренной текущими настройками модуля сессий
+Restart2 - Alternate button enabled=Установлена альтернативная кнопка для панели инструментов
+Restart2 - Normal button enabled=Установлена стандартная кнопка для панели инструментов
+Restart2 - Automatic error console enabled=Автозапуск консоли ошибок включен
+Restart2 - Automatic error console disabled=Автозапуск консоли ошибок выключен
+Restart2 - File CloseWindow menu enabled=Добавлен пункт "Перезапуск" в меню "Файл"
+Restart2 - File CloseWindow menu disabled=Удален пункт "Перезапуск" из меню "Файл"

@@ -1,0 +1,133 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ---------- Search+Icon v1.0.4 ----------------------------------------------
+#
+# Creates a search button that displays the default search engine's icon
+#
+#	Dependencies	:	main.kmm, search.kmm(Search+ v1.0.4)
+#	Preferences	:	kmeleon.plugins.macros.search.icon.*
+# --------------------------------------------------------------------------------------------
+
+
+$_Search_pref_Icon = $macroPrefBranch."search.icon.";
+$_Button="kmeleon.toolband.&Search";
+
+_DefineSearchIcons{
+$_SearchName="A9.com"; &_SetSearchIcon; 
+$_SearchName="Acronym Finder"; &_SetSearchIcon; 
+$_SearchName="AlltheWeb.com"; &_SetSearchIcon; 
+$_SearchName="AltaVista"; &_SetSearchIcon; 
+$_SearchName="Amazon.com"; &_SetSearchIcon; 
+$_SearchName="Answers.com"; &_SetSearchIcon; 
+$_SearchName="AOL"; &_SetSearchIcon; 
+$_SearchName="Ask.com"; &_SetSearchIcon; 
+$_SearchName="Astalavista.box.sk"; &_SetSearchIcon; 
+$_SearchName="Bing"; &_SetSearchIcon; 
+$_SearchName="Del.icio.us"; &_SetSearchIcon; 
+$_SearchName="Dictionary.com"; &_SetSearchIcon; 
+$_SearchName="Dogpile"; &_SetSearchIcon; 
+$_SearchName="DuckDuckGo"; &_SetSearchIcon; 
+$_SearchName="eBay.com"; &_SetSearchIcon; 
+$_SearchName="Find Travel To"; &_SetSearchIcon; 
+$_SearchName="GameFAQs Search"; &_SetSearchIcon; 
+$_SearchName="Gigablast"; &_SetSearchIcon; 
+$_SearchName="Google"; &_SetSearchIcon; 
+$_SearchName="HotBot"; &_SetSearchIcon; 
+$_SearchName="HowStuffWorks"; &_SetSearchIcon; 
+$_SearchName="IMDB"; &_SetSearchIcon; 
+$_SearchName="Ixquick Metasearch"; &_SetSearchIcon; 
+$_SearchName="Jux2"; &_SetSearchIcon; 
+$_SearchName="k-meleon"; &_SetSearchIcon; 
+$_SearchName="LEO"; &_SetSearchIcon; 
+$_SearchName="Lycos"; &_SetSearchIcon; 
+$_SearchName="Mamma Metasearch"; &_SetSearchIcon; 
+$_SearchName="Merriam-Webster Online Dictionary"; &_SetSearchIcon; 
+$_SearchName="MetaCrawler"; &_SetSearchIcon; 
+$_SearchName="MobyGames"; &_SetSearchIcon; 
+$_SearchName="Multimap.com"; &_SetSearchIcon; 
+$_SearchName="OneLook Dictionary Search"; &_SetSearchIcon; 
+$_SearchName="OOKO Search"; &_SetSearchIcon; 
+$_SearchName="Open Directory (dmoz.org)"; &_SetSearchIcon; 
+$_SearchName="Search.com"; &_SetSearchIcon; 
+$_SearchName="SnapFiles"; &_SetSearchIcon; 
+$_SearchName="Start Page"; &_SetSearchIcon; 
+$_SearchName="Viv"; &_SetSearchIcon; 
+$_SearchName="Wayback"; &_SetSearchIcon; 
+$_SearchName="Webshots"; &_SetSearchIcon; 
+$_SearchName="Weather.com"; &_SetSearchIcon; 
+$_SearchName="Wikipedia"; &_SetSearchIcon; 
+$_SearchName="Yahoo!"; &_SetSearchIcon; 
+$_SearchName="Yandex"; &_SetSearchIcon; 
+}
+_GetSearchIcon{
+$_SearchIcon=getpref(STRING, $_Search_pref_Icon . $_SearchName); 
+}
+_SetSearchIcon{
+&_GetSearchIcon; 
+$_SearchIcon ? "":setpref(STRING, $_Search_pref_Icon . $_SearchName, $_SearchName . ".bmp");
+}
+_SearchIconShare{
+index($_SearchName,"AOL")== -1 ? 0:$_SearchName =  "AOL";
+index($_SearchName,"Bing")== -1 ? 0:$_SearchName =  "Bing";
+index($_SearchName,"oogle")== -1 ? 0:$_SearchName =  "Google";
+index($_SearchName,"Internet Movie D")== -1 ? 0:$_SearchName =  "IMDB";
+index($_SearchName,"eleon")== -1 ? 0:$_SearchName =  "k-meleon";
+index($_SearchName,"LEO")== -1 ? 0:$_SearchName =  "LEO";
+index($_SearchName,"MSN")== -1 ? 0:$_SearchName =  "Bing";
+index($_SearchName,"Viv")== -1 ? 0:$_SearchName =  "Viv";
+index($_SearchName,"Internet Archive")== -1 ? 0:$_SearchName =  "Wayback";
+index($_SearchName,"Webshots")== -1 ? 0:$_SearchName =  "Webshots";
+index($_SearchName,"Wiki")== -1 ? 0:$_SearchName =  "Wikipedia";
+index($_SearchName,"Yahoo")== -1 ? 0:$_SearchName =  "Yahoo!";
+index($_SearchName,"Yand")== -1 ? 0:$_SearchName =  "Yandex";
+index($_SearchName,"Янд")== -1 ? 0:$_SearchName =  "Yandex";
+}
+_SetButtonIcon{
+pluginmsg(toolbars, "SetButtonImage", "&Search+, macros(SearchPlus), COLD,". $_SearchIcon."[0]");
+pluginmsg(toolbars, "SetButtonImage", "&Search+, macros(SearchPlus), HOT,". $_SearchIcon."[0]");
+}
+_ChangeSearchIcon{
+&_GetSearchDefault; &_GetSearchIcon; 
+$_SearchIcon=promptforfile($_SearchIcon, "Bitmap File", "*.bmp" );
+$_SearchIcon ? setpref(STRING, $_Search_pref_Icon. $_SearchName,$_SearchIcon):"";
+&_SearchIconDisplay;
+}
+
+_SearchIconDisplay{
+&_GetSearchIcon; $_SearchIcon ? "":&_SearchIconShare; &_GetSearchIcon; 
+$_SearchIcon ? "":$_SearchIcon="search.bmp"; &_SetButtonIcon; 
+}
+
+_SearchPlusToolbar{
+setpref(BOOL,$_Button." Buttons.visibility",false);
+$_Search_Break=getpref(INT,$_Button." Buttons.break");
+$_Search_Index=getpref(INT,$_Button." Buttons.index");
+setpref(INT,$_Button."+.break",$_Search_Break);
+#setpref(INT,$_Button."+.index",$_Search_Index);
+$_SearchAccel=getpref(STRING,$_Search_pref_Accel);
+$_SearchAccel=="ALT VK_RETURN" ? $_AccelTip="ALT+ENTER":$_AccelTip=_("CTRL+G");
+$_Search_Tooltip=_("Click this button or type into the URL bar and press ").$_AccelTip._(" to search the web. Right-click to choose a different search engine.");
+pluginmsg(toolbars,"AddToolbar","&Search+,16,16");
+pluginmsg(toolbars,"AddButton", "&Search+,Search,macros("."SearchPlus"."),"."&Web Search".",".$_Search_Tooltip.",16,16,"."search.bmp");
+}
+SearchPlus{
+&Search;
+}
+_SearchButtonsSync{
+$_Search_Break=getpref(INT,$_Button."+.break");
+$_Search_Index=getpref(INT,$_Button."+.index");
+setpref(INT,$_Button." Buttons.break",$_Search_Break);
+setpref(INT,$_Button." Buttons.index",$_Search_Index);
+setpref(BOOL,$_Button." Buttons.visibility",true);
+}
+
+_SearchIcon_SetAccel{
+setaccel("ALT I","macros(_ChangeSearchIcon)");
+}
+
+
+$OnInit=$OnInit."_DefineSearchIcons;_SearchIcon_SetAccel;";
+$OnSetup=$OnSetup."_SearchPlusToolbar;";
+$OnQuit=$OnQuit."_SearchButtonsSync;";
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."Search+Icon;";

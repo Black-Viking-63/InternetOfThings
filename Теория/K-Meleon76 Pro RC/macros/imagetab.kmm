@@ -1,0 +1,23 @@
+# K-Meleon Macros (http://kmeleon.sourceforge.net/wiki/index.php?id=MacroLanguage)
+
+# ----------imageinTAB---------------------------------------------------------------------------
+#
+# Dependencies	: -
+# Resources	: -
+# Preferences	: -
+#
+# ------------------------------------------------------------------------------------------------------------------
+
+imagetab{
+opentab($ImageURL);
+}
+
+imagetab_BuildMenu{
+# image menu(contextmenu)
+#setmenu(ImageView,macro,"&View Image",imagetab,2);
+}
+
+$OnInit=$OnInit."imagetab_BuildMenu;";
+
+# ------------------------------------------------------------------------------------------------------------------
+$macroModules=$macroModules."imagetab;";
